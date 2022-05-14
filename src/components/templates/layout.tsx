@@ -3,6 +3,7 @@ import MustBeAuthed from "@/atoms/mustBeAuthed";
 import { darkTheme, lightTheme, ThemeOptions } from "@/brand/theme";
 import Footer from "@/organisms/footer";
 import Navbar from "@/organisms/navbar";
+import { AnimationContext } from "app";
 import { motion } from "framer-motion";
 import { createContext, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
@@ -50,16 +51,6 @@ export default function Layout({
     }
   }, [theme]);
 
-  const pageMotion = {
-    initial: { opacity: 0, y: "0vh" },
-    animate: {
-      opacity: 1,
-      y: "0vh",
-      transition: { duration: 0.28 },
-    },
-    exit: { opacity: 0, y: "-5vh", transition: { duration: 0.15 } },
-  };
-
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       {restricted && <MustBeAuthed />}
@@ -67,17 +58,22 @@ export default function Layout({
         <Meta title={title} />
         <Page>
           <Navbar />
-          <Container
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            variants={pageMotion}
-            onAnimationStart={() => {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-          >
-            {children}
-          </Container>
+          <AnimationContext.Consumer>
+            {(value) => (
+              <Container
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                variants={value}
+                onAnimationStart={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              >
+                {console.log(value)}
+                {children}
+              </Container>
+            )}
+          </AnimationContext.Consumer>
           <Footer />
         </Page>
       </themeContext.Provider>
