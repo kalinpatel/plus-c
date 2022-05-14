@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useLockedBody } from "usehooks-ts";
 
@@ -30,6 +30,9 @@ const Overlay = styled.div`
   &.hide {
     display: none;
   }
+  &.cover {
+    height: 1000vh;
+  }
 `;
 
 const Modal = styled.div`
@@ -37,7 +40,7 @@ const Modal = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(400px, 100vw);
+  width: min(400px, calc(100vw - 60px));
   height: fit-content;
   background-color: white;
   border-radius: ${({ theme }) => theme.borderRadius.default};
@@ -49,6 +52,7 @@ const Modal = styled.div`
   justify-content: center;
   text-align: center;
   padding: 20px;
+  margin: 0 auto;
   &.show {
     animation: fadeIn 0.3s ease-in-out;
     @keyframes fadeIn {
@@ -138,6 +142,8 @@ export default function DeleteConfirmation({
 }: DeleteConfirmationProps) {
   const [deleteActionState, setDeleteActionState] = useState(false);
   const [, setLocked] = useLockedBody();
+  const modalRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   function handleDeleteInput(event: any) {
     if (event.target?.value.toLowerCase() === deleteWord) {
@@ -148,13 +154,17 @@ export default function DeleteConfirmation({
   }
 
   useEffect(() => {
+    if (show) {
+      modalRef.current?.scrollIntoView();
+      overlayRef.current?.classList.add("cover");
+    }
     setLocked(show);
   }, [show]);
 
   return (
     <>
-      <Overlay className={show ? "show" : "hide"} />
-      <Modal className={`show ${show ? "show" : "hide"}`}>
+      <Overlay className={show ? "show" : "hide"} ref={overlayRef} />
+      <Modal className={`show ${show ? "show" : "hide"}`} ref={modalRef}>
         <h2>{message}</h2>
         <p>
           Type <span>{deleteWord}</span> to confirm.
