@@ -1,45 +1,39 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { firebaseApp } from "@/firebase";
+import NotFound from "@/pages/404";
+import Home from "@/pages/home";
+import License from "@/pages/legal/license";
+import TermsOfUse from "@/pages/legal/terms";
+import Auth from "@/pages/user/auth";
+import Settings from "@/pages/user/settings";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import { AnimatePresence } from "framer-motion";
+import { Route, Routes, useLocation } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  initializeAppCheck(firebaseApp, {
+    provider: new ReCaptchaV3Provider(
+      import.meta.env.REACT_CLIENT_GOOGLE_RECAPTCHA_KEY
+    ),
+    isTokenAutoRefreshEnabled: true,
+  });
+
+  const location = useLocation();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
+    <AnimatePresence exitBeforeEnter>
+      <Routes location={location} key={location.pathname}>
+        {/* Home page */}
+        <Route index element={<Home />} />
+        {/* User pages */}
+        <Route path="/user/auth" element={<Auth />} />
+        <Route path="/user/settings" element={<Settings />} />
+        {/* Legal pages */}
+        <Route path="/legal/license" element={<License />} />
+        <Route path="/legal/terms" element={<TermsOfUse />} />
+        <Route path="/legal/privacy" element={<TermsOfUse privacy />} />
+        {/* 404 page */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AnimatePresence>
+  );
 }
-
-export default App
