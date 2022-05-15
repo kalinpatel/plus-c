@@ -1,15 +1,32 @@
 import SignOutButton from "@/atoms/signOutButton";
 import Logo from "@/brand/logo";
+import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
 import pages from "@/pages/index";
 import { Menu, MenuHeader, MenuItem } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { UserInfo } from "firebase";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CgClose, CgMenuLeft } from "react-icons/cg";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { useTheme } from "styled-components";
+import { useLockedBody } from "usehooks-ts";
+
+const Wrapper = styled.div`
+  &.mobile {
+    position: sticky;
+    top: 0;
+    z-index: 100000;
+    .inner-menu {
+      border-radius: 0px;
+      height: calc(100vh - ${({ theme }) => theme.headerHeight});
+      overflow-y: scroll;
+      position: fixed;
+      top: ${({ theme }) => theme.headerHeight} !important;
+    }
+  }
+`;
 
 const NavbarButton = styled.button`
   display: flex;
@@ -18,7 +35,7 @@ const NavbarButton = styled.button`
   width: 100vw;
   height: 94px;
   border-radius: 0px;
-  background-color: transparent;
+  background-color: ${({ theme }) => theme.colors.themed.major};
   border: none;
   .logo {
     height: 45px;
@@ -31,8 +48,7 @@ const NavbarButton = styled.button`
     margin-right: 30px;
     transition: color 0.18s ease-in-out;
   }
-  .dropdown-icon:hover,
-  .dropdown-icon:focus {
+  .dropdown-icon:hover {
     color: ${({ theme }) => theme.colors.brand.tertiary};
   }
   &.open .dropdown-icon {
@@ -40,13 +56,6 @@ const NavbarButton = styled.button`
   }
   &.open .dropdown-icon:hover {
     color: ${({ theme }) => theme.colors.brand.tertiary};
-  }
-  .always-visible-button {
-    display: block;
-    z-index: 1000000;
-    position: fixed;
-    top: 12px;
-    right: 12px;
   }
 `;
 
@@ -72,9 +81,7 @@ const CollapsibleMenu = styled(Menu)`
       padding: 10px 24px;
       &:hover {
         background-color: ${({ theme }) =>
-          theme.darkMode
-            ? theme.colors.peripheral.darkGrey
-            : theme.colors.peripheral.extraLightGrey};
+          theme.colors.peripheral.majorVariant};
       }
       &.indented {
         margin-left: 30px;
@@ -86,10 +93,6 @@ const CollapsibleMenu = styled(Menu)`
         &.current {
           color: ${({ theme }) => theme.colors.peripheral.grey};
           cursor: default;
-          &:hover {
-            background-color: ${({ theme }) =>
-              theme.colors.peripheral.majorVariant};
-          }
         }
       }
     }
@@ -116,6 +119,12 @@ const InternalDropdown = styled(MenuItem)`
     &.up {
       transform: rotate(180deg);
     }
+  }
+  &.open {
+    color: ${({ theme }) => theme.colors.themed.alwaysDark} !important;
+  }
+  &.closed {
+    background-color: ${({ theme }) => theme.colors.peripheral.majorVariant};
   }
 `;
 
@@ -145,143 +154,173 @@ export default function CollapsibleNav({ user }: CollapsibleNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const isMobilePWA = useIsInstalledMobile();
+  const [, setLockedBody] = useLockedBody();
+  const menuRef = useRef<HTMLElement>(null);
 
   const allSubMenuSetters: Array<
     React.Dispatch<React.SetStateAction<boolean>>
   > = [];
 
+  useEffect(() => {
+    if (isMobilePWA && menuRef.current) {
+      const touchEvents = [
+        "touchstart",
+        "touchmove",
+        "touchend",
+        "touchcancel",
+      ];
+      touchEvents.forEach((event) => {
+        menuRef.current?.addEventListener(event, (e) => {
+          console.log(e);
+          e.stopPropagation();
+        });
+      });
+    }
+  }, [menuRef]);
+
   return (
-    <CollapsibleMenu
-      menuButton={({ open }) => (
-        <NavbarButton
-          className={open ? "open" : "closed"}
-          aria-label="Navigation Menu Button"
-        >
-          <Logo
-            type={theme.darkMode ? "text-light" : "text-dark"}
-            className="logo"
-          />
-          {open ? (
-            <CgClose className="dropdown-icon" />
-          ) : (
-            <CgMenuLeft className="dropdown-icon" />
-          )}
-        </NavbarButton>
-      )}
-      transition
-      menuClassName="inner-menu"
-    >
-      <>
-        <MenuItem onClick={() => navigate("/")}>Home</MenuItem>
-        {user ? (
-          <>
-            <InternalDropdown
-              onClick={(e) => {
-                e.keepOpen = true;
-                setUserMenuOpen(!userMenuOpen);
-              }}
-            >
-              {user.displayName
-                ? `Account: ${user.displayName}`
-                : "Account Options"}
-              <RiArrowDropDownLine
-                className={`dropdown-arrow ${userMenuOpen ? "up" : "down"}`}
-              />
-            </InternalDropdown>
-            <SubDropdown
-              className={`sub-menu ${userMenuOpen ? "open" : "closed"}`}
-            >
-              <MenuItem
-                className="indented"
-                onClick={() => navigate("/user/history")}
-              >
-                History
-              </MenuItem>
-              <MenuItem
-                className="indented"
-                onClick={() => navigate("/user/settings")}
-              >
-                Settings
-              </MenuItem>
-              <SignOutButtonWrapper>
-                <SignOutButton />
-              </SignOutButtonWrapper>
-            </SubDropdown>
-          </>
-        ) : (
-          <MenuItem
-            onClick={() =>
-              navigate("/user/auth", {
-                state: location.pathname,
-              })
-            }
-          >
-            Sign In
-          </MenuItem>
-        )}
-        {pages.map((category, categoryIndex) => {
-          const [subMenuOpen, setSubMenuOpen] = useState(false);
-          allSubMenuSetters.push(setSubMenuOpen);
+    <Wrapper className={isMobilePWA ? "mobile" : ""}>
+      <CollapsibleMenu
+        menuButton={({ open }) => {
+          if (isMobilePWA) {
+            console.log(open);
+            setLockedBody(true);
+          }
           return (
-            <div key={`${categoryIndex}-wrapper`}>
+            <NavbarButton
+              className={open ? "open" : "closed"}
+              aria-label="Navigation Menu Button"
+            >
+              <Logo
+                type={theme.darkMode ? "text-light" : "text-dark"}
+                className="logo"
+              />
+              {open ? (
+                <CgClose className="dropdown-icon" />
+              ) : (
+                <CgMenuLeft className="dropdown-icon" />
+              )}
+            </NavbarButton>
+          );
+        }}
+        transition
+        menuClassName="inner-menu"
+        ref={menuRef}
+      >
+        <>
+          <MenuItem onClick={() => navigate("/")}>Home</MenuItem>
+          {user ? (
+            <>
               <InternalDropdown
-                key={`${categoryIndex}-button`}
                 onClick={(e) => {
                   e.keepOpen = true;
-                  setSubMenuOpen(!subMenuOpen);
+                  setUserMenuOpen(!userMenuOpen);
                 }}
               >
-                {category.name}
+                {user.displayName
+                  ? `Account: ${user.displayName}`
+                  : "Account Options"}
                 <RiArrowDropDownLine
-                  className={`dropdown-arrow ${subMenuOpen ? "up" : "down"}`}
+                  className={`dropdown-arrow ${userMenuOpen ? "up" : "down"}`}
                 />
               </InternalDropdown>
               <SubDropdown
-                key={`${categoryIndex}-menu`}
-                className={`sub-menu ${subMenuOpen ? "open" : "closed"}`}
+                className={`sub-menu ${userMenuOpen ? "open" : "closed"}`}
               >
-                {category.items.map((item, itemIndex) => {
-                  if (item.header) {
-                    return (
-                      <MenuHeader
-                        className="indented"
-                        key={`${categoryIndex}-${itemIndex}-header`}
-                      >
-                        {item.header}
-                      </MenuHeader>
-                    );
-                  } else {
-                    return (
-                      <MenuItem
-                        className={`indented ${
-                          location.pathname.includes(
-                            `/${category.path}/${item.path}`
-                          )
-                            ? "current"
-                            : ""
-                        }`}
-                        key={`${categoryIndex}-${itemIndex}-item`}
-                        onClick={() => {
-                          if (
-                            location.pathname !==
-                            `/${category.path}/${item.path}`
-                          ) {
-                            navigate(`/${category.path}/${item.path}`);
-                          } else {
-                            setSubMenuOpen(false);
-                          }
-                        }}
-                      >
-                        {item.name}
-                      </MenuItem>
-                    );
-                  }
-                })}
+                <MenuItem
+                  className="indented"
+                  onClick={() => navigate("/user/history")}
+                >
+                  History
+                </MenuItem>
+                <MenuItem
+                  className="indented"
+                  onClick={() => navigate("/user/settings")}
+                >
+                  Settings
+                </MenuItem>
+                <SignOutButtonWrapper>
+                  <SignOutButton />
+                </SignOutButtonWrapper>
               </SubDropdown>
-            </div>
-          );
-        })}
-      </>
-    </CollapsibleMenu>
+            </>
+          ) : (
+            <MenuItem
+              onClick={() =>
+                navigate("/user/auth", {
+                  state: location.pathname,
+                })
+              }
+            >
+              Sign In
+            </MenuItem>
+          )}
+          {pages.map((category, categoryIndex) => {
+            const [subMenuOpen, setSubMenuOpen] = useState(false);
+            allSubMenuSetters.push(setSubMenuOpen);
+            return (
+              <div key={`${categoryIndex}-wrapper`}>
+                <InternalDropdown
+                  key={`${categoryIndex}-button`}
+                  onClick={(e) => {
+                    e.keepOpen = true;
+                    setSubMenuOpen(!subMenuOpen);
+                  }}
+                  className={subMenuOpen ? "open" : "closed"}
+                >
+                  {category.name}
+                  <RiArrowDropDownLine
+                    className={`dropdown-arrow ${subMenuOpen ? "up" : "down"}`}
+                  />
+                </InternalDropdown>
+                <SubDropdown
+                  key={`${categoryIndex}-menu`}
+                  className={`sub-menu ${subMenuOpen ? "open" : "closed"}`}
+                >
+                  {category.items.map((item, itemIndex) => {
+                    if (item.header) {
+                      return (
+                        <MenuHeader
+                          className="indented"
+                          key={`${categoryIndex}-${itemIndex}-header`}
+                        >
+                          {item.header}
+                        </MenuHeader>
+                      );
+                    } else {
+                      return (
+                        <MenuItem
+                          className={`indented ${
+                            location.pathname.includes(
+                              `/${category.path}/${item.path}`
+                            )
+                              ? "current"
+                              : ""
+                          }`}
+                          key={`${categoryIndex}-${itemIndex}-item`}
+                          onClick={() => {
+                            if (
+                              location.pathname !==
+                              `/${category.path}/${item.path}`
+                            ) {
+                              navigate(`/${category.path}/${item.path}`);
+                            } else {
+                              setSubMenuOpen(false);
+                            }
+                          }}
+                        >
+                          {item.name}
+                        </MenuItem>
+                      );
+                    }
+                  })}
+                </SubDropdown>
+              </div>
+            );
+          })}
+        </>
+      </CollapsibleMenu>
+    </Wrapper>
   );
 }

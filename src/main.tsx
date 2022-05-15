@@ -7,7 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import smoothScroll from "smoothscroll-polyfill";
 import { registerSW } from "virtual:pwa-register";
-import App from "./app";
+import App from "app";
 
 smoothScroll.polyfill();
 
