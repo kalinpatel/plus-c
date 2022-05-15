@@ -1,4 +1,4 @@
-import { UserInfo } from "firebase/index";
+import { UserInfo } from "firebase";
 import { useEffect, useState } from "react";
 
 interface MagicLinkTextProps {

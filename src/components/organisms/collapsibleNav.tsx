@@ -5,7 +5,7 @@ import pages from "@/pages/index";
 import { Menu, MenuHeader, MenuItem } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
-import { UserInfo } from "firebase/index";
+import { UserInfo } from "firebase";
 import React, { useEffect, useRef, useState } from "react";
 import { CgClose, CgMenuLeft } from "react-icons/cg";
 import { RiArrowDropDownLine } from "react-icons/ri";
