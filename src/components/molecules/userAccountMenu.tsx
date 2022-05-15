@@ -6,7 +6,7 @@ import {
 } from "@/molecules/dropdownMenu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
-import { UserInfo } from "firebase";
+import { UserInfo } from "firebase/index";
 import { useEffect, useState } from "react";
 import { MdHistory, MdSettings } from "react-icons/md";
 import { RiUser3Fill } from "react-icons/ri";

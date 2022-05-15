@@ -1,6 +1,6 @@
 import { firebaseProviderGoogle, firebaseProviderMicrosoft } from "@/firebase";
-import { UserInfo } from "firebase";
 import { linkWithPopup, reauthenticateWithPopup, unlink } from "firebase/auth";
+import { UserInfo } from "firebase/index";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";

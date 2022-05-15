@@ -1,7 +1,7 @@
-import { UserInfo } from "firebase";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
+import { UserInfo } from "firebase/index";
 import { firebaseConfig } from "./configs";
 
 // Initialize Firebase
