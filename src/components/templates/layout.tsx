@@ -69,7 +69,6 @@ export default function Layout({
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
               >
-                {console.log(value)}
                 {children}
               </Container>
             )}
