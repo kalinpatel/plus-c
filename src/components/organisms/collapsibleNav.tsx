@@ -17,13 +17,13 @@ const Wrapper = styled.div`
   &.mobile {
     position: sticky;
     top: 0;
-    z-index: 100000;
+    z-index: 9998;
     .inner-menu {
       border-radius: 0px;
-      height: calc(100vh - ${({ theme }) => theme.headerHeight});
+      height: calc(100vh - 50px);
       overflow-y: scroll;
       position: fixed;
-      top: ${({ theme }) => theme.headerHeight} !important;
+      top: 50px !important;
     }
   }
 `;
@@ -56,6 +56,14 @@ const NavbarButton = styled.button`
   }
   &.open .dropdown-icon:hover {
     color: ${({ theme }) => theme.colors.brand.tertiary};
+  }
+  ${Wrapper}.mobile & {
+    height: 50px;
+    .logo {
+      height: 35px;
+      position: relative;
+      left: -10%;
+    }
   }
 `;
 
