@@ -1,6 +1,6 @@
+import Logo from "@/brand/logo";
 import { Link } from "react-router-dom";
 import styled, { useTheme } from "styled-components";
-import Logo from "@/brand/logo";
 
 const Container = styled.div`
   display: flex;
