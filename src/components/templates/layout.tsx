@@ -1,12 +1,14 @@
 import Meta from "@/atoms/meta";
 import MustBeAuthed from "@/atoms/mustBeAuthed";
 import { darkTheme, lightTheme, ThemeOptions } from "@/brand/theme";
+import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
+import ErrorBoundaryComponent from "@/molecules/errorBoundry";
 import Footer from "@/organisms/footer";
 import Navbar from "@/organisms/navbar";
 import { AnimationContext } from "app";
 import { motion } from "framer-motion";
 import { createContext, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { useTernaryDarkMode } from "usehooks-ts";
 
 const Page = styled.main`
@@ -18,6 +20,10 @@ const Page = styled.main`
   margin: 0;
   background-color: ${({ theme }) => theme.colors.themed.major};
   font-family: ${({ theme }) => theme.typography.fontFamily};
+  overflow-x: hidden;
+  &.mobile {
+    padding-top: 50px;
+  }
 `;
 
 const Container = styled(motion.div)`
@@ -25,6 +31,39 @@ const Container = styled(motion.div)`
   background-color: ${({ theme }) => theme.colors.themed.major};
   margin: 0;
   padding: 0;
+`;
+
+const GlobalStyle = createGlobalStyle`
+body > .ML__keyboard {
+  --keyboard-background: ${({ theme }) =>
+    theme.colors.brand.secondary} !important;
+  --keyboard-text: #fff !important;
+  --keyboard-text-active: ${({ theme }) =>
+    theme.colors.brand.tertiary} !important;
+  --keyboard-background-border: ${({ theme }) =>
+    theme.colors.brand.secondary} !important;
+  --keycap-background: ${({ theme }) =>
+    theme.colors.peripheral.majorVariant} !important;
+  --keycap-background-active: ${({ theme }) =>
+    theme.darkMode
+      ? theme.colors.peripheral.darkGrey
+      : theme.colors.peripheral.extraLightGrey} !important;
+  --keycap-modifier-background: ${({ theme }) =>
+    theme.darkMode
+      ? theme.colors.peripheral.darkGrey
+      : theme.colors.peripheral.extraLightGrey} !important;
+  --keycap-modifier-border: ${({ theme }) =>
+    theme.darkMode
+      ? theme.colors.peripheral.darkGrey
+      : theme.colors.peripheral.extraLightGrey} !important;
+  --keycap-text: ${({ theme }) => theme.colors.themed.minor} !important;
+
+  @media (max-width: 768px) {
+    .ML__keyboard--plate {
+      padding-bottom: 40px !important;
+    }
+  }
+}
 `;
 
 interface LayoutProps {
@@ -44,6 +83,7 @@ export default function Layout({
 }: LayoutProps) {
   const { isDarkMode, ternaryDarkMode, setTernaryDarkMode } =
     useTernaryDarkMode();
+  const isMobilePWA = useIsInstalledMobile();
 
   useEffect(() => {
     if (theme) {
@@ -53,10 +93,11 @@ export default function Layout({
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <GlobalStyle />
       {restricted && <MustBeAuthed />}
       <themeContext.Provider value={ternaryDarkMode}>
         <Meta title={title} />
-        <Page>
+        <Page className={isMobilePWA ? "mobile " : ""}>
           <Navbar />
           <AnimationContext.Consumer>
             {(value) => (
@@ -68,8 +109,11 @@ export default function Layout({
                 onAnimationStart={() => {
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
+                onAnimationEnd={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
               >
-                {children}
+                <ErrorBoundaryComponent>{children}</ErrorBoundaryComponent>
               </Container>
             )}
           </AnimationContext.Consumer>

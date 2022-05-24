@@ -10,6 +10,8 @@ import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { AnimatePresence } from "framer-motion";
 import { createContext, useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
+import EulersMethod from "./pages/content/methods/eulersMethod";
+import Test from "./pages/test";
 
 const DesktopAnimation = {
   initial: { opacity: 0, y: "0vh" },
@@ -66,6 +68,10 @@ export default function App() {
           <Route path="/legal/license" element={<License />} />
           <Route path="/legal/terms" element={<TermsOfUse />} />
           <Route path="/legal/privacy" element={<TermsOfUse privacy />} />
+          {/* Methods */}
+          <Route path="/methods/eulers-method" element={<EulersMethod />} />
+          {/* Test Page */}
+          <Route path="/test" element={<Test />} />
           {/* 404 page */}
           <Route path="*" element={<NotFound />} />
         </Routes>

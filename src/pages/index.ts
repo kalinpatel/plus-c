@@ -117,6 +117,16 @@ const pages = [
       },
     ],
   },
+  {
+    name: "Methods",
+    path: "methods",
+    items: [
+      {
+        name: "Euler's Method",
+        path: "eulers-method",
+      },
+    ],
+  },
 ];
 
 export default pages;

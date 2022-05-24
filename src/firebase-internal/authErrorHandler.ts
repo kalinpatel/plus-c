@@ -13,6 +13,8 @@ export default function handleError(error: FirebaseError): string {
       return "You have cancelled the login process. Try again.";
     case "auth/user-cancelled":
       return "You did not complete the entire login process. Try again.";
+    case "auth/invalid-action-code":
+      return "The link you clicked is invalid. It might be expired. Try again.";
     default:
       return `An unknown error occurred. Please try again. Error Code: ${error.code}`;
   }

@@ -7,9 +7,9 @@
 
 body {
   background-color: #177e89;
+  overflow-x: hidden;
 }
 
 ::selection {
-  background-color: #db3069;
-  color: white;
+  background-color: rgba(219, 48, 105, 0.45);
 }

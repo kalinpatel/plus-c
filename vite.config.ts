@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import reactSvgPlugin from "vite-plugin-react-svg";
+import { defineConfig } from "vite";
 import checker from "vite-plugin-checker";
 import { VitePWA } from "vite-plugin-pwa";
 import { qrcode } from "vite-plugin-qrcode";
+import reactSvgPlugin from "vite-plugin-react-svg";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/

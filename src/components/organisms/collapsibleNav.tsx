@@ -15,7 +15,7 @@ import { useLockedBody } from "usehooks-ts";
 
 const Wrapper = styled.div`
   &.mobile {
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 9998;
     .inner-menu {
@@ -59,6 +59,10 @@ const NavbarButton = styled.button`
   }
   ${Wrapper}.mobile & {
     height: 50px;
+    padding-bottom: 5px;
+    box-shadow: 0px 0px 10px
+      ${({ theme }) =>
+        theme.darkMode ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.1)"};
     .logo {
       height: 35px;
       position: relative;
