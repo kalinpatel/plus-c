@@ -291,7 +291,7 @@ export default function CollapsibleNav({ user }: CollapsibleNavProps) {
                   className={`sub-menu ${subMenuOpen ? "open" : "closed"}`}
                 >
                   {category.items.map((item, itemIndex) => {
-                    if (item.header) {
+                    if ("header" in item && item.header) {
                       return (
                         <MenuHeader
                           className="indented"
@@ -300,7 +300,7 @@ export default function CollapsibleNav({ user }: CollapsibleNavProps) {
                           {item.header}
                         </MenuHeader>
                       );
-                    } else {
+                    } else if ("path" in item) {
                       return (
                         <MenuItem
                           className={`indented ${

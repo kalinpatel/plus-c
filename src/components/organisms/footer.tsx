@@ -119,6 +119,7 @@ export default function Footer() {
         </CompanySection>
         <LinksSection>
           <FooterLink to="/about">About</FooterLink>
+          <FooterLink to="/user/settings">Settings</FooterLink>
           <FooterLink to="/legal/terms">
             Terms of Use & Privacy Statement
           </FooterLink>

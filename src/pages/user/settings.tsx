@@ -1,3 +1,4 @@
+import Button from "@/atoms/defaultButton";
 import Header from "@/atoms/header";
 import MagicLinkText from "@/atoms/magicLinkText";
 import ProfileContainer from "@/atoms/profileContainer";
@@ -8,6 +9,8 @@ import DeleteAccountOrData from "@/molecules/deleteAccountOrData";
 import ThemeSwitcher from "@/molecules/themeSwitcher";
 import Layout, { themeContext } from "@/templates/layout";
 import { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Page = styled.div`
@@ -22,7 +25,8 @@ const Section = styled.section`
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     width: 50rem;
   }
-  h2 {
+  h2,
+  h3 {
     color: ${({ theme }) => theme.colors.themed.minor};
   }
   & > p {
@@ -47,21 +51,39 @@ const Section = styled.section`
     margin-bottom: -12px;
     margin-top: 20px;
   }
+  &.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export default function Settings() {
   const [theme, setTheme] = useState<ThemeOptions | undefined>(undefined);
+  const [user] = useAuthState(firebaseAuth);
+  const navigate = useNavigate();
 
   return (
-    <Layout title="Settings" theme={theme} restricted>
+    <Layout title="Settings" theme={theme}>
       <Header
         title="Settings"
         subtitle="Modify your account and display preferences"
       />
       <Page>
-        <Section>
-          <ProfileContainer />
-        </Section>
+        {user && (
+          <Section>
+            <ProfileContainer />
+          </Section>
+        )}
+        {!user && (
+          <Section className="centered">
+            <h3>Sign in to your account to see more preferences.</h3>
+            <Button className="primary" onClick={() => navigate("/user/auth")}>
+              Sign In
+            </Button>
+          </Section>
+        )}
         <Section>
           <h2>Theme Preference</h2>
           <p>Your choice will only be saved on this device, in this browser.</p>
@@ -71,25 +93,30 @@ export default function Settings() {
             )}
           </themeContext.Consumer>
         </Section>
-        <Section>
-          <h2>Linked Accounts</h2>
-          <p>
-            You can link your Google and Microsoft accounts to your account for
-            easier login. <MagicLinkText user={firebaseAuth.currentUser} />
-          </p>
-          <AccountLinker user={firebaseAuth.currentUser} />
-        </Section>
-        <Section className="danger">
-          <h2>Danger Zone</h2>
-          <p>
-            The buttons below can cause irreversible changes to your account!
-            Think carefully before using them.
-          </p>
-          <p>
-            Both buttons below will clear your entire history of calculations.
-          </p>
-          <DeleteAccountOrData />
-        </Section>
+        {user && (
+          <Section>
+            <h2>Linked Accounts</h2>
+            <p>
+              You can link your Google and Microsoft accounts to your account
+              for easier login.{" "}
+              <MagicLinkText user={firebaseAuth.currentUser} />
+            </p>
+            <AccountLinker user={firebaseAuth.currentUser} />
+          </Section>
+        )}
+        {user && (
+          <Section className="danger">
+            <h2>Danger Zone</h2>
+            <p>
+              The buttons below can cause irreversible changes to your account!
+              Think carefully before using them.
+            </p>
+            <p>
+              Both buttons below will clear your entire history of calculations.
+            </p>
+            <DeleteAccountOrData />
+          </Section>
+        )}
       </Page>
     </Layout>
   );

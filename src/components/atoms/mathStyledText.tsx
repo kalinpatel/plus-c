@@ -4,7 +4,7 @@ const MathFont = styled.span`
   font-family: "Lora", serif;
   font-weight: 600;
   font-style: italic;
-  color: ${({ theme }) => theme.colors.themed.minor};
+  color: inherit;
   &.no-italics {
     font-style: normal;
   }

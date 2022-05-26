@@ -36,7 +36,7 @@ const LoginArea = styled.div`
   margin: 0 auto;
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     position: relative;
-    top: -100px;
+    top: -50px;
   }
   background-color: ${({ theme }) => theme.colors.brand.secondary};
   border-radius: ${({ theme }) => theme.borderRadius.large};

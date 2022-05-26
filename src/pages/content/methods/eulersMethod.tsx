@@ -1,6 +1,6 @@
 import InputField from "@/atoms/inputField";
 import MathInputSection from "@/atoms/mathInputSection";
-import MathSubmitButtonsRow, { Button } from "@/atoms/mathSubmitButtonsRow";
+import MathSubmitButtonsRow from "@/atoms/mathSubmitButtonsRow";
 import { InputContainer, InputSection } from "@/atoms/responsiveInputFields";
 import calculateEulersMethod, {
   EulersMethodAnswer,
@@ -14,6 +14,7 @@ import CalculatorLayout from "@/templates/calculatorLayout";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { VscDebugRestart } from "react-icons/vsc";
+import Button from "@/atoms/defaultButton";
 
 interface StepCountInputsInterface {
   numberUsed: boolean;

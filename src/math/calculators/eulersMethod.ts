@@ -17,6 +17,10 @@ interface EulersMethodStep {
   y: string;
   dydx: string | null;
   dy: string | null;
+  xReason: string;
+  yReason: string;
+  dydxReason: string | null;
+  dyReason: string | null;
 }
 
 export interface EulersMethodAnswer {
@@ -38,9 +42,16 @@ const FormatOptions: FormatOptions = {
 };
 
 function formatted(value: MathNode): string {
-  const formatted = format(value, FormatOptions);
-  if (formatted.endsWith(".000")) {
-    return formatted.slice(0, formatted.length - 4);
+  let formatted = format(value, FormatOptions);
+  for (let i = formatted.length - 1; i >= 0; i--) {
+    if (formatted.endsWith("0")) {
+      formatted = formatted.slice(0, i);
+    } else {
+      break;
+    }
+  }
+  if (formatted.endsWith(".")) {
+    return formatted.slice(0, formatted.length - 1);
   }
   return formatted;
 }
@@ -81,6 +92,12 @@ export default function calculateEulersMethod({
         y: formatted(initialY),
         dydx: formatted(initialDyDx),
         dy: formatted(initialDy),
+        xReason: "Initial value was provided.",
+        yReason: "Initial value was provided.",
+        dydxReason: `Use the given differential equation, and plug in x = ${initialX.toString()} and y = ${initialY.toString()}.`,
+        dyReason: `Multiply dy/dx = ${formatted(
+          initialDyDx
+        )} by dx (step size) = ${stepSize} to find dy.`,
       },
     ];
     for (let i = 0; i < Number(stepCount.toString()) - 1; i++) {
@@ -99,6 +116,14 @@ export default function calculateEulersMethod({
         y: formatted(y),
         dydx: formatted(dydx),
         dy: formatted(dy),
+        xReason: `x = ${values[i].x} + dx = ${formatted(x)}`,
+        yReason: `y = ${values[i].y} + dy = ${formatted(y)}`,
+        dydxReason: `Use the given differential equation, and plug in x = ${formatted(
+          x
+        )} and y = ${formatted(y)}.`,
+        dyReason: `Multiply dy/dx = ${formatted(
+          dydx
+        )} by dx (step size) = ${stepSize} to find dy.`,
       });
     }
     const finalX = parse(
@@ -118,6 +143,14 @@ export default function calculateEulersMethod({
       y: formatted(finalY),
       dydx: null,
       dy: null,
+      xReason: `x = ${
+        values[values.length - 1].x
+      } + dx (step size) = ${formatted(finalX)}`,
+      yReason: `y = ${values[values.length - 1].y} + ${
+        values[values.length - 1].dy
+      } = ${formatted(finalY)}`,
+      dydxReason: null,
+      dyReason: null,
     });
     return {
       completed: true,

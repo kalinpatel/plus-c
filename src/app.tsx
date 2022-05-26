@@ -1,6 +1,7 @@
 import { firebaseApp } from "@/firebase";
 import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
 import NotFound from "@/pages/404";
+import HelpPage from "@/pages/help";
 import Home from "@/pages/home";
 import License from "@/pages/legal/license";
 import TermsOfUse from "@/pages/legal/terms";
@@ -11,7 +12,6 @@ import { AnimatePresence } from "framer-motion";
 import { createContext, useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import EulersMethod from "./pages/content/methods/eulersMethod";
-import Test from "./pages/test";
 
 const DesktopAnimation = {
   initial: { opacity: 0, y: "0vh" },
@@ -70,8 +70,8 @@ export default function App() {
           <Route path="/legal/privacy" element={<TermsOfUse privacy />} />
           {/* Methods */}
           <Route path="/methods/eulers-method" element={<EulersMethod />} />
-          {/* Test Page */}
-          <Route path="/test" element={<Test />} />
+          {/* Help */}
+          <Route path="/help" element={<HelpPage />} />
           {/* 404 page */}
           <Route path="*" element={<NotFound />} />
         </Routes>
