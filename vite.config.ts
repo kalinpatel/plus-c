@@ -35,6 +35,7 @@ export default defineConfig({
         enabled: true,
       },
       workbox: {
+        maximumFileSizeToCacheInBytes: 4 * 1000000,
         runtimeCaching: [
           getCache({
             pattern: /^https:\/\/fonts.googleapis.com/,
