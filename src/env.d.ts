@@ -12,6 +12,8 @@ interface ImportMetaEnv {
   readonly REACT_CLIENT_GOOGLE_CLIENT_ID: string;
   readonly REACT_CLIENT_GOOGLE_RECAPTCHA_KEY: string;
   readonly REACT_CLIENT_FIREBASE_REDIRECT_ORIGIN: string;
+  readonly REACT_CLIENT_FIREBASE_API_DOMAIN;
+  readonly REACT_CLIENT_FIREBASE_LINK_DOMAIN;
 }
 
 interface ImportMeta {

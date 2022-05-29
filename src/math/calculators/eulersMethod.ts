@@ -1,3 +1,5 @@
+import { firebasePerformance } from "@/firebase";
+import { trace } from "firebase/performance";
 import { evaluate, format, FormatOptions, MathNode, parse } from "mathjs";
 import { parseTex } from "../parser";
 
@@ -63,6 +65,9 @@ export default function calculateEulersMethod({
   step: stepInput,
   diffEq: diffEqInput,
 }: EulersMethodInputs): EulersMethodReturn {
+  const calcTrace = trace(firebasePerformance, "Calculate Euler's Method");
+  calcTrace.start();
+
   const initialX = parse(initialXInput);
   const initialY = parse(initialYInput);
   const finalX = parse(finalXInput);
@@ -152,6 +157,8 @@ export default function calculateEulersMethod({
       dydxReason: null,
       dyReason: null,
     });
+    calcTrace.stop();
+    calcTrace.putMetric("iterations", values.length);
     return {
       completed: true,
       result: values,
@@ -159,9 +166,12 @@ export default function calculateEulersMethod({
     };
   } catch (err: any) {
     console.log(err);
+    calcTrace.stop();
+    calcTrace.putAttribute("error", "true");
+
     return {
       completed: false,
-      errorMessage: err.message,
+      errorMessage: err.message || "Unknown error.",
     };
   }
 }

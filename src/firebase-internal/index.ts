@@ -2,6 +2,7 @@ import { UserInfo } from "firebase";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
+import { getPerformance } from "firebase/performance";
 import { firebaseConfig } from "./configs";
 
 // Initialize Firebase
@@ -14,6 +15,9 @@ export const firebaseProviderMicrosoft = new OAuthProvider("microsoft.com");
 
 // Initialize Firebase Analytics
 export const firebaseAnalytics = getAnalytics(firebaseApp);
+
+// Initialize Firebase Performance Monitoring
+export const firebasePerformance = getPerformance(firebaseApp);
 
 export function getOrganizationAffiliation(user: UserInfo) {
   const organizationsToCheck = [
