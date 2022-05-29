@@ -39,8 +39,8 @@ export default function ShareHandler() {
       logEvent(firebaseAnalytics, "share_file_view");
       window.location.replace(
         `${
-          import.meta.env.REACT_CLIENT_FIREBASE_REDIRECT_ORIGIN
-        }/cloud-storage/${location.pathname.slice(12)}`
+          import.meta.env.REACT_CLIENT_FIREBASE_API_DOMAIN
+        }/file/${location.pathname.slice(12)}`
       );
     } else if (location.pathname.startsWith("/link/")) {
       logEvent(firebaseAnalytics, "external_link_view");

@@ -1,12 +1,3 @@
 {
-  "rewrites": [
-    {
-      "source": "/cloud-storage/:match*",
-      "destination": "https://plusc.page.link/:match*"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/"
-    }
-  ]
+  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
 }
