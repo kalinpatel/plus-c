@@ -82,6 +82,7 @@ export default function DeleteAccountOrData() {
 
   function deleteUserAccount(user: any) {
     if (!user) return;
+
     toast
       .promise(user.delete(), {
         loading: "Deleting...",

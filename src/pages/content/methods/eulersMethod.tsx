@@ -4,7 +4,7 @@ import MathInputSection from "@/atoms/mathInputSection";
 import MathSubmitButtonsRow from "@/atoms/mathSubmitButtonsRow";
 import { InputContainer, InputSection } from "@/atoms/responsiveInputFields";
 import { firebaseAuth } from "@/firebase";
-import saveToFirestore, { FirebaseDocData } from "@/firebase/saveToFirestore";
+import saveToFirestore from "@/firebase/saveToFirestore";
 import calculateEulersMethod, {
   EulersMethodAnswer,
   EulersMethodInputs,
@@ -50,11 +50,16 @@ const FlexRow = styled.div`
   gap: 20px;
 `;
 
+const ShareText = styled.p`
+  margin-bottom: 20px;
+  color: ${({ theme }) => theme.colors.themed.minor};
+`;
+
 export default function EulersMethod() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("input");
   const [canSubmit, setCanSubmit] = useState(false);
   const [output, setOutput] = useState<EulersMethodAnswer | null>(null);
-  const [shareData, setShareData] = useState<FirebaseDocData | null>(null);
+  const [shareData, setShareData] = useState<string | null>(null);
   const [shareMessage, setShareMessage] = useState(
     "Share functionality is not available."
   );
@@ -79,7 +84,7 @@ export default function EulersMethod() {
   });
   const location = useLocation();
   const state = location.state as any;
-  const isFromDb = state && "dbData" in state;
+  const isFromDb = state && typeof state == "object" && "dbData" in state;
   const dbData = isFromDb ? state.dbData : null;
 
   useEffectOnce(() => {
@@ -99,6 +104,10 @@ export default function EulersMethod() {
       setOutput(result as EulersMethodAnswer);
       setCurrentScreen("output");
       setValues(dataValues);
+      setShareMessage(
+        `This calculation was originally shared by ${state.dbInfo.ownerName}.`
+      );
+      setShareData(state.dbInfo.shareUrl);
     }
   });
 
@@ -157,9 +166,8 @@ export default function EulersMethod() {
       setShareMessage("Your calculation is not saved since you are offline.");
       return;
     }
-    setShareData(docData);
+    setShareData(docData.shareLink);
     setShareMessage("");
-    console.log(docData.shareLink);
   }
 
   const Input = (
@@ -295,21 +303,23 @@ export default function EulersMethod() {
     <>
       <EulersOutputTable input={values} result={output} />
       <FlexRow>
-        <Button
-          type="button"
-          onClick={() => {
-            clearData();
-            setCurrentScreen("input");
-          }}
-          className="icon"
-        >
-          Restart <VscDebugRestart />
-        </Button>
+        {!isFromDb && (
+          <Button
+            type="button"
+            onClick={() => {
+              clearData();
+              setCurrentScreen("input");
+            }}
+            className="icon"
+          >
+            Restart <VscDebugRestart />
+          </Button>
+        )}
         {shareData && (
           <Button
             type="button"
             onClick={() => {
-              if (!shareData.shareLink) return;
+              if (!shareData) return;
               if (
                 "canShare" in navigator &&
                 navigator.canShare() &&
@@ -319,10 +329,10 @@ export default function EulersMethod() {
                 navigator.share({
                   title: "Euler's Method Calculation",
                   text: "Check out this calculation I made using +C.",
-                  url: shareData.shareLink,
+                  url: shareData,
                 });
               } else {
-                navigator.clipboard.writeText(shareData.shareLink).then(() => {
+                navigator.clipboard.writeText(shareData).then(() => {
                   toast.success("Share link copied to clipboard");
                 });
               }
@@ -333,7 +343,7 @@ export default function EulersMethod() {
           </Button>
         )}
       </FlexRow>
-      <p>{shareMessage}</p>
+      <ShareText>{shareMessage}</ShareText>
     </>
   );
 

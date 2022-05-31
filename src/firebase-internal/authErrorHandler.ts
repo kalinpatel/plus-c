@@ -4,7 +4,7 @@ export default function handleError(error: FirebaseError): string {
   console.warn(`Auth Error Occurred: ${error.code}`);
   switch (error.code) {
     case "auth/account-exists-with-different-credential":
-      return "You signed in with a different provider for this email.";
+      return "You signed in with a different provider for this email. You can link your accounts after signing in.";
     case "auth/user-disabled":
       return "Your account has been disabled.";
     case "auth/popup-blocked":

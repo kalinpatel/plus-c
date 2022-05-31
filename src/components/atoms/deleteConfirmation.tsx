@@ -30,15 +30,12 @@ const Overlay = styled.div`
   &.hide {
     display: none;
   }
-  &.cover {
-    height: 1000vh;
-  }
 `;
 
 const Modal = styled.div`
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 50vh;
+  left: 50vw;
   transform: translate(-50%, -50%);
   width: min(400px, calc(100vw - 60px));
   height: fit-content;
@@ -142,8 +139,7 @@ export default function DeleteConfirmation({
 }: DeleteConfirmationProps) {
   const [deleteActionState, setDeleteActionState] = useState(false);
   const [, setLocked] = useLockedBody();
-  const modalRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   function handleDeleteInput(event: any) {
     if (event.target?.value.toLowerCase() === deleteWord) {
@@ -154,17 +150,13 @@ export default function DeleteConfirmation({
   }
 
   useEffect(() => {
-    if (show) {
-      modalRef.current?.scrollIntoView();
-      overlayRef.current?.classList.add("cover");
-    }
     setLocked(show);
   }, [show]);
 
   return (
     <>
-      <Overlay className={show ? "show" : "hide"} ref={overlayRef} />
-      <Modal className={`show ${show ? "show" : "hide"}`} ref={modalRef}>
+      <Overlay className={show ? "show" : "hide"} />
+      <Modal className={`show ${show ? "show" : "hide"}`}>
         <h2>{message}</h2>
         <p>
           Type <span>{deleteWord}</span> to confirm.
@@ -174,6 +166,7 @@ export default function DeleteConfirmation({
           onChange={handleDeleteInput}
           placeholder={`${deleteWord}`}
           className={deleteActionState ? "complete" : ""}
+          ref={inputRef}
         />
         <div className="buttons">
           <button
@@ -189,6 +182,9 @@ export default function DeleteConfirmation({
           <button
             className="cancel-delete"
             onClick={() => {
+              if (inputRef.current) {
+                inputRef.current.value = "";
+              }
               if (onCancel) {
                 onCancel();
               }

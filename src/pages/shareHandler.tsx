@@ -10,9 +10,12 @@ export default function ShareHandler() {
   const location = useLocation();
 
   async function retrieveCalcData(url: string) {
+    console.log("retrieveCalcData", url);
     const docRef = doc(db, `/calculations/${url}`);
     const document = await getDoc(docRef);
+    console.log("doc retrieved", document);
     if (!document.exists()) {
+      navigate("/");
       return false;
     }
     const docData = document.data();
@@ -33,14 +36,15 @@ export default function ShareHandler() {
 
   useEffectOnce(() => {
     if (location.pathname.startsWith("/share/calc/")) {
+      console.log("share calc");
       logEvent(firebaseAnalytics, "share_calc_view");
-      retrieveCalcData(location.pathname.slice(13));
+      retrieveCalcData(location.pathname.slice(12));
     } else if (location.pathname.startsWith("/share/gcs/")) {
       logEvent(firebaseAnalytics, "share_file_view");
       window.location.replace(
         `${
           import.meta.env.REACT_CLIENT_FIREBASE_API_DOMAIN
-        }/file/${location.pathname.slice(12)}`
+        }/file/${location.pathname.slice(11)}`
       );
     } else if (location.pathname.startsWith("/link/")) {
       logEvent(firebaseAnalytics, "external_link_view");

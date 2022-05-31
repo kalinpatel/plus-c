@@ -15,10 +15,10 @@ import EulersMethod from "./pages/content/methods/eulersMethod";
 import ShareHandler from "./pages/shareHandler";
 
 const DesktopAnimation = {
-  initial: { opacity: 0, y: "0vh" },
+  initial: { opacity: 0, y: "unset" },
   animate: {
     opacity: 1,
-    y: "0vh",
+    y: "unset",
     transition: { duration: 0.28 },
   },
   exit: { opacity: 0, y: "-5vh", transition: { duration: 0.15 } },
