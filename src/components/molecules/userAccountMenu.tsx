@@ -18,7 +18,7 @@ const AuthButton = styled.button`
   border-color: transparent;
   cursor: pointer;
   margin-left: 10px;
-  padding-left: 26px;
+  padding-left: 17px;
   padding-right: 25px;
 `;
 
@@ -31,6 +31,17 @@ const UserPicture = styled.img`
   &:hover,
   ${AuthButton}:hover > & {
     border-color: ${({ theme }) => theme.colors.brand.tertiary};
+  }
+  animation: fadeIn 0.18s ease-in-out;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 `;
 
@@ -54,6 +65,17 @@ const EmptyUserPicture = styled.span`
     border-color: ${({ theme }) => theme.colors.brand.tertiary};
     fill: ${({ theme }) => theme.colors.brand.tertiary};
     color: ${({ theme }) => theme.colors.brand.tertiary};
+  }
+  animation: fadeIn 0.18s ease-in-out;
+  animation-delay: 0.15s;
+  opacity: 0;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 `;
 

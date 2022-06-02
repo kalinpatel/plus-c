@@ -39,13 +39,6 @@ export default function ShareHandler() {
       console.log("share calc");
       logEvent(firebaseAnalytics, "share_calc_view");
       retrieveCalcData(location.pathname.slice(12));
-    } else if (location.pathname.startsWith("/share/gcs/")) {
-      logEvent(firebaseAnalytics, "share_file_view");
-      window.location.replace(
-        `${
-          import.meta.env.REACT_CLIENT_FIREBASE_API_DOMAIN
-        }/file/${location.pathname.slice(11)}`
-      );
     } else if (location.pathname.startsWith("/link/")) {
       logEvent(firebaseAnalytics, "external_link_view");
       window.location.replace(

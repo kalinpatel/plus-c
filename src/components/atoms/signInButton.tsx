@@ -1,6 +1,6 @@
+import { FiLogIn } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FiLogIn } from "react-icons/fi";
 
 const LoginButton = styled.button`
   width: 100px;
@@ -22,6 +22,15 @@ const LoginButton = styled.button`
   svg {
     position: relative;
     top: 3px;
+  }
+  animation: fadeIn 0.18s ease-in-out;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 `;
 

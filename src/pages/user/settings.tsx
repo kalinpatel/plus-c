@@ -2,13 +2,12 @@ import Button from "@/atoms/defaultButton";
 import Header from "@/atoms/header";
 import MagicLinkText from "@/atoms/magicLinkText";
 import ProfileContainer from "@/atoms/profileContainer";
-import { ThemeOptions } from "@/brand/theme";
 import { firebaseAuth } from "@/firebase";
 import AccountLinker from "@/molecules/accountLinker";
 import DeleteAccountOrData from "@/molecules/deleteAccountOrData";
 import ThemeSwitcher from "@/molecules/themeSwitcher";
-import Layout, { themeContext } from "@/templates/layout";
-import { useState } from "react";
+import Layout from "@/templates/layout";
+import { themeContext } from "app";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -60,12 +59,11 @@ const Section = styled.section`
 `;
 
 export default function Settings() {
-  const [theme, setTheme] = useState<ThemeOptions | undefined>(undefined);
   const [user] = useAuthState(firebaseAuth);
   const navigate = useNavigate();
 
   return (
-    <Layout title="Settings" theme={theme}>
+    <Layout title="Settings">
       <Header
         title="Settings"
         subtitle="Modify your account and display preferences"
@@ -89,7 +87,10 @@ export default function Settings() {
           <p>Your choice will only be saved on this device, in this browser.</p>
           <themeContext.Consumer>
             {(value) => (
-              <ThemeSwitcher onThemeChange={setTheme} currentTheme={value} />
+              <ThemeSwitcher
+                onThemeChange={value.setSetting}
+                currentTheme={value.setting}
+              />
             )}
           </themeContext.Consumer>
         </Section>

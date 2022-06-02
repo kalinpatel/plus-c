@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import GoogleOneTapLogin from "react-google-one-tap-login";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 import { useWindowSize } from "usehooks-ts";
 
 interface OneTapLoginProps {
@@ -23,9 +24,10 @@ interface AnalyticsProperties {
 }
 
 export default function OneTapLogin({ disabled }: OneTapLoginProps) {
-  const [signedIn] = useAuthState(firebaseAuth);
+  const [signedIn, loadingSignedIn] = useAuthState(firebaseAuth);
   const [hidden, setHidden] = useState(false);
   const { width: windowWidth } = useWindowSize();
+  const location = useLocation();
 
   useEffect(() => {
     if (windowWidth < 768) {
@@ -65,18 +67,20 @@ export default function OneTapLogin({ disabled }: OneTapLoginProps) {
   }
 
   return (
-    <>
-      {!disabled && !signedIn && !hidden && (
-        <GoogleOneTapLogin
-          onError={console.log}
-          disabled={!!signedIn || disabled || hidden}
-          googleAccountConfigs={{
-            callback: handleOneTapLogin,
-            cancel_on_tap_outside: false,
-            client_id: googleConfig.client_id,
-          }}
-        />
-      )}
-    </>
+    <GoogleOneTapLogin
+      onError={console.log}
+      disabled={
+        hidden ||
+        disabled ||
+        loadingSignedIn ||
+        !!(!loadingSignedIn && signedIn) ||
+        location.pathname !== "/"
+      }
+      googleAccountConfigs={{
+        callback: handleOneTapLogin,
+        cancel_on_tap_outside: false,
+        client_id: googleConfig.client_id,
+      }}
+    />
   );
 }

@@ -77,25 +77,25 @@ const pages: Category[] = [
   //     },
   //   ],
   // },
-  // {
-  //   name: "Integrals",
-  //   path: "integrals",
-  //   items: [
-  //     {
-  //       name: "Riemann Sum (Integral Approximation)",
-  //       path: "riemann-sum",
-  //     },
-  //     { header: "Computed Integrals" },
-  //     {
-  //       name: "Indefinite Integral (Antiderivative)",
-  //       path: "indefinite-integral",
-  //     },
-  //     {
-  //       name: "Definite Integral",
-  //       path: "definite-integral",
-  //     },
-  //   ],
-  // },
+  {
+    name: "Integrals",
+    path: "integrals",
+    items: [
+      {
+        name: "Riemann Sum Visualizer",
+        path: "riemann-sum",
+      },
+      { header: "Computed Integrals" },
+      {
+        name: "Indefinite Integral (Antiderivative)",
+        path: "indefinite-integral",
+      },
+      {
+        name: "Definite Integral",
+        path: "definite-integral",
+      },
+    ],
+  },
   // {
   //   name: "Applications",
   //   path: "applications",

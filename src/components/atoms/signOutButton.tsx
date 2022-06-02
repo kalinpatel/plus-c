@@ -1,6 +1,7 @@
 import { firebaseAuth } from "@/firebase";
 import { MenuItem } from "@szhsin/react-menu";
 import { signOut } from "firebase/auth";
+import { toast } from "react-hot-toast";
 import { FiLogOut } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -85,15 +86,14 @@ export default function SignOutButton({
     return (
       <MenuButton
         className={className}
-        onClick={() =>
-          signOut(firebaseAuth).then(() => {
-            if (location.pathname !== "/user/auth") {
-              navigate("/user/auth", {
-                state: "signedOut",
-              });
-            }
-          })
-        }
+        onClick={() => {
+          navigate("/user/auth");
+          toast.promise(signOut(firebaseAuth), {
+            loading: "Signing out...",
+            success: "Signed out successfully!",
+            error: "Error signing out. Please try again.",
+          });
+        }}
       >
         <SignOutIcon /> Sign Out
       </MenuButton>

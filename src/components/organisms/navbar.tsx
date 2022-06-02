@@ -32,11 +32,16 @@ const NavLinks = styled.div`
   gap: 6px;
 `;
 
+const SignInFiller = styled.div`
+  width: 100px;
+  pointer-events: none;
+`;
+
 export default function Navbar() {
   const isResponsiveNavbar = useMediaQuery("(max-width: 992px)");
   const location = useLocation();
   const navigate = useNavigate();
-  const [user] = useAuthState(firebaseAuth);
+  const [user, loading] = useAuthState(firebaseAuth);
 
   return (
     <>
@@ -65,7 +70,15 @@ export default function Navbar() {
                 key={page.name}
               />
             ))}
-            {user ? <UserAccountMenu user={user} /> : <SignInButton />}
+            {!loading && user ? (
+              <UserAccountMenu user={user} />
+            ) : loading ? (
+              <SignInFiller />
+            ) : !user ? (
+              <SignInButton />
+            ) : (
+              <SignInFiller />
+            )}
           </NavLinks>
         </Navigation>
       )}
