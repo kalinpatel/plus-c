@@ -4,7 +4,8 @@ import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
 import Footer from "@/organisms/footer";
 import Navbar from "@/organisms/navbar";
 import NotFound from "@/pages/404";
-import EulersMethod from "@/pages/content/methods/eulersMethod";
+import EulersMethod from "@/pages/content/approximations/eulersMethod";
+import RiemannSum from "@/pages/content/integrals/riemannSum";
 import HelpPage from "@/pages/help";
 import Home from "@/pages/home";
 import License from "@/pages/legal/license";
@@ -133,8 +134,15 @@ export default function App() {
               <Route path="/legal/license" element={<License />} />
               <Route path="/legal/terms" element={<TermsOfUse />} />
               <Route path="/legal/privacy" element={<TermsOfUse privacy />} />
-              {/* Methods */}
-              <Route path="/methods/eulers-method" element={<EulersMethod />} />
+
+              {/* ---- CONTENT START ---- */}
+              <Route
+                path="/approximations/eulers-method"
+                element={<EulersMethod />}
+              />
+              <Route path="/integrals/riemann-sum" element={<RiemannSum />} />
+              {/* ---- CONTENT END ---- */}
+
               {/* Help */}
               <Route path="/help" element={<HelpPage />} />
               {/* Share Handler */}

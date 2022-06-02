@@ -1,3 +1,21 @@
 {
-  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
+  "rewrites": [
+    {
+      "source": "/share/gcs/:file",
+      "destination": "https://api.plusc.kalinpatel.me/file/:file"
+    },
+    {
+      "source": "/((?!link/.*).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/link/:path",
+      "destination": "https://api.plusc.kalinpatel.me/url/:path"
+    }
+  ],
+  "github": {
+    "silent": true
+  }
 }

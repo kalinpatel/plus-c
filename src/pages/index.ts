@@ -134,7 +134,7 @@ const pages: Category[] = [
   // },
   {
     name: "Approximations",
-    path: "methods",
+    path: "approximations",
     items: [
       {
         name: "Euler's Method",
