@@ -2,9 +2,17 @@ import Meta from "@/atoms/meta";
 import MustBeAuthed from "@/atoms/mustBeAuthed";
 import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
 import ErrorBoundaryComponent from "@/molecules/errorBoundry";
+import Navbar from "@/organisms/navbar";
 import { AnimationContext } from "app";
 import { motion } from "framer-motion";
 import styled from "styled-components";
+
+const Container = styled(motion.div)`
+  min-height: calc(100vh - ${({ theme }) => theme.headerHeight});
+  background-color: ${({ theme }) => theme.colors.themed.major};
+  margin: 0;
+  padding: 0;
+`;
 
 const Page = styled.main`
   display: flex;
@@ -21,26 +29,37 @@ const Page = styled.main`
   }
 `;
 
-const Container = styled(motion.div)`
-  min-height: calc(100vh - ${({ theme }) => theme.headerHeight});
-  background-color: ${({ theme }) => theme.colors.themed.major};
-  margin: 0;
-  padding: 0;
-`;
-
 interface LayoutProps {
   children: any;
   title: string;
   restricted?: boolean;
+  background?: string;
 }
 
-export default function Layout({ children, title, restricted }: LayoutProps) {
+export default function Layout({
+  children,
+  title,
+  restricted,
+  background,
+}: LayoutProps) {
   const isMobilePWA = useIsInstalledMobile();
+  let bg = "";
+  if (background) {
+    bg = `background-image: url(${background});`;
+  }
+  const ImageWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    min-height: calc(100vh - 94px);
+    background-size: cover;
+    ${bg}
+  `;
 
   return (
     <>
       {restricted && <MustBeAuthed />}
       <Meta title={title} />
+      <Navbar />
       <Page className={isMobilePWA ? "mobile " : ""}>
         <AnimationContext.Consumer>
           {(value) => (
@@ -56,7 +75,9 @@ export default function Layout({ children, title, restricted }: LayoutProps) {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
-              <ErrorBoundaryComponent>{children}</ErrorBoundaryComponent>
+              <ErrorBoundaryComponent>
+                <ImageWrapper>{children}</ImageWrapper>
+              </ErrorBoundaryComponent>
             </Container>
           )}
         </AnimationContext.Consumer>

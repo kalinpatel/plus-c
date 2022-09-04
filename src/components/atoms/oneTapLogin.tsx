@@ -12,7 +12,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import GoogleOneTapLogin from "react-google-one-tap-login";
 import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
-import { useWindowSize } from "usehooks-ts";
+import { useEffectOnce, useWindowSize } from "usehooks-ts";
 
 interface OneTapLoginProps {
   disabled?: boolean;
@@ -36,6 +36,12 @@ export default function OneTapLogin({ disabled }: OneTapLoginProps) {
       setHidden(false);
     }
   }, [windowWidth]);
+
+  useEffectOnce(() => {
+    // Always present One Tap on new session
+    document.cookie =
+      "g_state=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  });
 
   function handleOneTapLogin({ credential }: any) {
     if (!credential) return;
@@ -74,7 +80,7 @@ export default function OneTapLogin({ disabled }: OneTapLoginProps) {
         disabled ||
         loadingSignedIn ||
         !!(!loadingSignedIn && signedIn) ||
-        location.pathname !== "/"
+        (location.pathname !== "/" && !location.pathname.startsWith("/study"))
       }
       googleAccountConfigs={{
         callback: handleOneTapLogin,

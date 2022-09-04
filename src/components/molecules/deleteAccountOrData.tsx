@@ -1,14 +1,26 @@
 import DeleteConfirmation from "@/atoms/deleteConfirmation";
 import {
+  firebaseApp,
   firebaseAuth,
   firebaseProviderGoogle,
   firebaseProviderMicrosoft,
 } from "@/firebase";
 import { reauthenticateWithPopup } from "firebase/auth";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  limit,
+  query,
+  where,
+  writeBatch,
+} from "firebase/firestore";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
+const db = getFirestore(firebaseApp);
 
 const Container = styled.div`
   display: flex;
@@ -61,8 +73,15 @@ export default function DeleteAccountOrData() {
   const [deleteModalShown, setDeleteModalShown] = useState(false);
   const [clearDataModalShown, setClearDataModalShown] = useState(false);
 
-  function handleShowClearData() {
-    const dataExists = false;
+  async function handleShowClearData() {
+    const calcsCollection = collection(db, "calculations");
+    const calcsQuery = query(
+      calcsCollection,
+      where("owneruid", "==", firebaseAuth.currentUser?.uid),
+      limit(1)
+    );
+    const calcsDocs = await getDocs(calcsQuery);
+    const dataExists = calcsDocs.docs.length > 0 ? true : false;
     if (dataExists) {
       setClearDataModalShown(true);
     } else {
@@ -128,9 +147,24 @@ export default function DeleteAccountOrData() {
     deleteUserAccount(user);
   }
 
-  function clearData() {
+  async function clearData() {
     setClearDataModalShown(false);
-    console.log("clear data");
+    // DELETE CALCULATIONS
+    const calcsCollection = collection(db, "calculations");
+    const calcsQuery = query(
+      calcsCollection,
+      where("owneruid", "==", firebaseAuth.currentUser?.uid)
+    );
+    const calcsDocs = await getDocs(calcsQuery);
+    for (let i = 0; i < calcsDocs.docs.length; i += 500) {
+      const batchCalcs = writeBatch(db);
+      for (let j = i; j < i + 500; j++) {
+        if (j >= calcsDocs.docs.length) break;
+        batchCalcs.delete(calcsDocs.docs[j].ref);
+      }
+      await batchCalcs.commit();
+    }
+    // DELETE STUDY DECKS
   }
 
   return (

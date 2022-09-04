@@ -2,6 +2,7 @@ import Button from "@/atoms/defaultButton";
 import Header from "@/atoms/header";
 import MagicLinkText from "@/atoms/magicLinkText";
 import ProfileContainer from "@/atoms/profileContainer";
+import RandomShapesBackground from "@/brand/assets/BG_RandomShapes.svg";
 import { firebaseAuth } from "@/firebase";
 import AccountLinker from "@/molecules/accountLinker";
 import DeleteAccountOrData from "@/molecules/deleteAccountOrData";
@@ -19,11 +20,19 @@ const Page = styled.div`
   margin-bottom: 60px;
 `;
 
-const Section = styled.section`
+const Container = styled.div`
   width: calc(100vw - 40px);
+  height: 100%;
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     width: 50rem;
+    padding: 0 30px;
+    padding-bottom: 30px;
   }
+  background-color: ${({ theme }) => theme.colors.themed.major};
+  border-radius: ${({ theme }) => theme.borderRadius.default};
+`;
+
+const Section = styled.section`
   h2,
   h3 {
     color: ${({ theme }) => theme.colors.themed.minor};
@@ -63,61 +72,69 @@ export default function Settings() {
   const navigate = useNavigate();
 
   return (
-    <Layout title="Settings">
+    <Layout title="Settings" background={RandomShapesBackground}>
       <Header
         title="Settings"
         subtitle="Modify your account and display preferences"
       />
       <Page>
-        {user && (
+        <Container>
+          {user && (
+            <Section>
+              <ProfileContainer />
+            </Section>
+          )}
+          {!user && (
+            <Section className="centered">
+              <h3>Sign in to your account to see more preferences.</h3>
+              <Button
+                className="primary"
+                onClick={() => navigate("/user/auth")}
+              >
+                Sign In
+              </Button>
+            </Section>
+          )}
           <Section>
-            <ProfileContainer />
-          </Section>
-        )}
-        {!user && (
-          <Section className="centered">
-            <h3>Sign in to your account to see more preferences.</h3>
-            <Button className="primary" onClick={() => navigate("/user/auth")}>
-              Sign In
-            </Button>
-          </Section>
-        )}
-        <Section>
-          <h2>Theme Preference</h2>
-          <p>Your choice will only be saved on this device, in this browser.</p>
-          <themeContext.Consumer>
-            {(value) => (
-              <ThemeSwitcher
-                onThemeChange={value.setSetting}
-                currentTheme={value.setting}
-              />
-            )}
-          </themeContext.Consumer>
-        </Section>
-        {user && (
-          <Section>
-            <h2>Linked Accounts</h2>
+            <h2>Theme Preference</h2>
             <p>
-              You can link your Google and Microsoft accounts to your account
-              for easier login.{" "}
-              <MagicLinkText user={firebaseAuth.currentUser} />
+              Your choice will only be saved on this device, in this browser.
             </p>
-            <AccountLinker user={firebaseAuth.currentUser} />
+            <themeContext.Consumer>
+              {(value) => (
+                <ThemeSwitcher
+                  onThemeChange={value.setSetting}
+                  currentTheme={value.setting}
+                />
+              )}
+            </themeContext.Consumer>
           </Section>
-        )}
-        {user && (
-          <Section className="danger">
-            <h2>Danger Zone</h2>
-            <p>
-              The buttons below can cause irreversible changes to your account!
-              Think carefully before using them.
-            </p>
-            <p>
-              Both buttons below will clear your entire history of calculations.
-            </p>
-            <DeleteAccountOrData />
-          </Section>
-        )}
+          {user && (
+            <Section>
+              <h2>Linked Accounts</h2>
+              <p>
+                You can link your Google and Microsoft accounts to your account
+                for easier login.{" "}
+                <MagicLinkText user={firebaseAuth.currentUser} />
+              </p>
+              <AccountLinker user={firebaseAuth.currentUser} />
+            </Section>
+          )}
+          {user && (
+            <Section className="danger">
+              <h2>Danger Zone</h2>
+              <p>
+                The buttons below can cause irreversible changes to your
+                account! Think carefully before using them.
+              </p>
+              <p>
+                Both buttons below will clear your entire history of
+                calculations and study decks.
+              </p>
+              <DeleteAccountOrData />
+            </Section>
+          )}
+        </Container>
       </Page>
     </Layout>
   );

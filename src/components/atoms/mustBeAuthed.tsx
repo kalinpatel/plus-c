@@ -1,27 +1,21 @@
 import { firebaseAuth } from "@/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffectOnce } from "usehooks-ts";
 
 export default function MustBeAuthed() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [user, loading] = useAuthState(firebaseAuth);
 
-  useEffectOnce(() => {
-    if (!firebaseAuth.currentUser) {
+  useEffect(() => {
+    if (!user && !loading) {
       navigate("/user/auth", {
         state: location.pathname,
+        replace: true,
       });
     }
-  });
-
-  onAuthStateChanged(firebaseAuth, (user) => {
-    if (!user) {
-      navigate("/user/auth", {
-        state: location.pathname,
-      });
-    }
-  });
+  }, [user, loading]);
 
   return null;
 }

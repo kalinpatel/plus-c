@@ -72,7 +72,6 @@ export default function AccountLinker({ user }: AccountLinkerProps) {
           setMicrosoftProviderStatus(true);
         }
       });
-      console.log(user.providerData);
     }
   }, [user]);
 
@@ -116,11 +115,13 @@ export default function AccountLinker({ user }: AccountLinkerProps) {
           },
         })
         .then(() => {
-          if (provider.providerId === "google.com") {
-            setGoogleProviderStatus(false);
-          } else if (provider.providerId === "microsoft.com") {
-            setMicrosoftProviderStatus(false);
-          }
+          user.providerData.forEach((provider: UserInfo) => {
+            if (provider.providerId === "google.com") {
+              setGoogleProviderStatus(true);
+            } else if (provider.providerId === "microsoft.com") {
+              setMicrosoftProviderStatus(true);
+            }
+          });
         });
     }
   }

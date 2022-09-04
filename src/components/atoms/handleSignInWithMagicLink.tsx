@@ -50,7 +50,7 @@ export default function HandleSignInWithMagicLink() {
           logEvent(firebaseAnalytics, "login", eventProperties);
 
           if (redirectLink) {
-            navigate(redirectLink);
+            navigate(redirectLink, { replace: true });
           } else {
             navigate("/");
           }

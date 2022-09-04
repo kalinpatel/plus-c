@@ -104,6 +104,7 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   required?: boolean;
   onUserChange?: (value: string) => void;
   tooltipOnHover?: boolean;
+  numericInput?: boolean;
 }
 
 export default function InputField({
@@ -115,6 +116,7 @@ export default function InputField({
   width,
   tooltip,
   tooltipOnHover,
+  numericInput,
   ...props
 }: InputFieldProps) {
   const id = uuid();
@@ -144,6 +146,7 @@ export default function InputField({
           }
         }}
         required={required}
+        inputMode={numericInput ? "decimal" : undefined}
         {...props}
       />
       {label && <StyledLabel htmlFor={id}>{label}</StyledLabel>}

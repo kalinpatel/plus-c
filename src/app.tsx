@@ -2,7 +2,6 @@ import { darkTheme, lightTheme, ThemeOptions } from "@/brand/theme";
 import { firebaseApp } from "@/firebase";
 import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
 import Footer from "@/organisms/footer";
-import Navbar from "@/organisms/navbar";
 import NotFound from "@/pages/404";
 import EulersMethod from "@/pages/content/approximations/eulersMethod";
 import RiemannSum from "@/pages/content/integrals/riemannSum";
@@ -12,6 +11,7 @@ import License from "@/pages/legal/license";
 import TermsOfUse from "@/pages/legal/terms";
 import ShareHandler from "@/pages/shareHandler";
 import Auth from "@/pages/user/auth";
+import History from "@/pages/user/history";
 import Settings from "@/pages/user/settings";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { AnimatePresence } from "framer-motion";
@@ -121,7 +121,6 @@ export default function App() {
           setSetting: setTernaryDarkMode,
         }}
       >
-        <Navbar />
         <AnimationContext.Provider value={animationValue}>
           <AnimatePresence exitBeforeEnter>
             <Routes location={location} key={location.pathname}>
@@ -130,6 +129,7 @@ export default function App() {
               {/* User pages */}
               <Route path="/user/auth" element={<Auth />} />
               <Route path="/user/settings" element={<Settings />} />
+              <Route path="/user/history" element={<History />} />
               {/* Legal pages */}
               <Route path="/legal/license" element={<License />} />
               <Route path="/legal/terms" element={<TermsOfUse />} />

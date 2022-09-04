@@ -6,7 +6,7 @@ import { getPerformance, trace } from "firebase/performance";
 import "katex/dist/katex.min.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import smoothScroll from "smoothscroll-polyfill";
 import { registerSW } from "virtual:pwa-register";
@@ -92,10 +92,7 @@ if ("serviceWorker" in navigator) {
       }
     },
     onOfflineReady: () => {
-      toast("You can now use this app offline.", {
-        icon: "🤖",
-        duration: 5000,
-      });
+      console.info("SW is ready to go offline");
     },
   });
 }

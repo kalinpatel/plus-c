@@ -1,5 +1,6 @@
 import HandleSignInWithMagicLink from "@/atoms/handleSignInWithMagicLink";
 import MustBeOnline from "@/atoms/mustBeOnline";
+import SprinkleShapesBackground from "@/brand/assets/BG_SprinkleShapes.svg";
 import { firebaseAuth } from "@/firebase";
 import DidYouKnow from "@/molecules/didYouKnow";
 import LoginWithMagicLink from "@/molecules/loginWithMagicLink";
@@ -36,7 +37,7 @@ const LoginArea = styled.div`
   margin: 0 auto;
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     position: relative;
-    top: -50px;
+    top: -5%;
   }
   background-color: ${({ theme }) => theme.colors.brand.secondary};
   border-radius: ${({ theme }) => theme.borderRadius.large};
@@ -126,7 +127,7 @@ export default function Auth() {
   function handleAuthDestination(user: UserInfo | null) {
     if (user) {
       if (referrerState && referrerState !== "signedOut") {
-        navigate(referrerState);
+        navigate(referrerState, { replace: true });
       } else {
         navigate("/");
       }
@@ -146,7 +147,7 @@ export default function Auth() {
   });
 
   return (
-    <Layout title="Sign In">
+    <Layout title="Sign In" background={SprinkleShapesBackground}>
       <MustBeOnline serviceName="Logging in">
         <HandleSignInWithMagicLink />
         <Page>

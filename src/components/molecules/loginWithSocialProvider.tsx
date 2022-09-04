@@ -8,6 +8,7 @@ import {
 import handleError from "@/firebase/authErrorHandler";
 import { logEvent } from "firebase/analytics";
 import {
+  AuthProvider,
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
@@ -56,7 +57,7 @@ const ProviderButton = styled.button`
 
 export default function LoginWithSocialProvider() {
   function handleSignIn(
-    authProvider: GoogleAuthProvider | OAuthProvider,
+    authProvider: GoogleAuthProvider | OAuthProvider | AuthProvider,
     displayName: string
   ) {
     toast
@@ -94,7 +95,12 @@ export default function LoginWithSocialProvider() {
     <>
       <ProviderButton
         onClick={() => {
-          handleSignIn(firebaseProviderGoogle, "Google");
+          handleSignIn(
+            firebaseProviderGoogle.setCustomParameters({
+              prompt: "select_account",
+            }),
+            "Google"
+          );
         }}
       >
         <FcGoogle />

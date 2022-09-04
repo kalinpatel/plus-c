@@ -51,6 +51,7 @@ const FlexRow = styled.div`
 `;
 
 const ShareText = styled.p`
+  margin-top: 40px;
   margin-bottom: 20px;
   color: ${({ theme }) => theme.colors.themed.minor};
 `;
@@ -105,7 +106,11 @@ export default function EulersMethod() {
       setCurrentScreen("output");
       setValues(dataValues);
       setShareMessage(
-        `This calculation was originally shared by ${state.dbInfo.ownerName}.`
+        `This calculation was originally created by ${
+          state.dbInfo.ownerName
+        } on ${new Date(
+          state.dbInfo.timestamp.seconds * 1000
+        ).toLocaleDateString()}.`
       );
       setShareData(state.dbInfo.shareUrl);
     }
@@ -206,7 +211,7 @@ export default function EulersMethod() {
         <InputContainer>
           <InputSection>
             <InputField
-              placeholder="X"
+              placeholder="ex: 1/2 or 0.5"
               label="Initial X Value"
               width="half"
               required
@@ -216,7 +221,7 @@ export default function EulersMethod() {
               }}
             />
             <InputField
-              placeholder="Y"
+              placeholder="ex: 1/2 or 0.5"
               label="Initial Y Value"
               width="half"
               required
@@ -228,7 +233,7 @@ export default function EulersMethod() {
           </InputSection>
           <InputSection>
             <InputField
-              placeholder="X"
+              placeholder="ex: 1/2 or 0.5"
               label="Final X Value"
               width="half"
               required
@@ -264,10 +269,11 @@ export default function EulersMethod() {
                   },
                 });
               }}
+              numericInput
             />
             OR
             <InputField
-              placeholder="Step Size"
+              placeholder="ex: 1/2 or 0.5"
               label="Step Size"
               width="half"
               tooltip={stepCountInputs.sizeTooltip}
@@ -291,6 +297,7 @@ export default function EulersMethod() {
                   },
                 });
               }}
+              numericInput
             />
           </InputSection>
         </InputContainer>
