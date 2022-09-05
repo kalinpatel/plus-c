@@ -36,6 +36,13 @@ interface LayoutProps {
   background?: string;
 }
 
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 94px);
+  background-size: cover;
+`;
+
 export default function Layout({
   children,
   title,
@@ -45,15 +52,8 @@ export default function Layout({
   const isMobilePWA = useIsInstalledMobile();
   let bg = "";
   if (background) {
-    bg = `background-image: url(${background});`;
+    bg = `url(${background})`;
   }
-  const ImageWrapper = styled.div`
-    width: 100%;
-    height: 100%;
-    min-height: calc(100vh - 94px);
-    background-size: cover;
-    ${bg}
-  `;
 
   return (
     <>
@@ -76,7 +76,13 @@ export default function Layout({
               }}
             >
               <ErrorBoundaryComponent>
-                <ImageWrapper>{children}</ImageWrapper>
+                <ImageWrapper
+                  style={{
+                    backgroundImage: bg,
+                  }}
+                >
+                  {children}
+                </ImageWrapper>
               </ErrorBoundaryComponent>
             </Container>
           )}

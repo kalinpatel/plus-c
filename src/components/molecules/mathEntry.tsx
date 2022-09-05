@@ -123,11 +123,6 @@ export default function MathEntry({
         virtualKeyboardMode: "manual",
         virtualKeyboards: keyboards,
         virtualKeyboardTheme: "apple",
-        // onFocus: () => {
-        //   setTimeout(() => {
-        //     debugger;
-        //   }, 1000);
-        // },
       });
       mathfield.appendChild(mf);
 
