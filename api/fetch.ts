@@ -1,12 +1,12 @@
 import http from "axios";
 import { parse } from "node-html-parser";
 
-export default async function handler(request, response) {
+export default async function handler(request: any, response: any) {
   const data = await q_set(request.body.link);
   return response.status(200).json({ data });
 }
 
-const q_set = async (url) => {
+const q_set = async (url: string) => {
   try {
     const raw_set = (
       await http.get(url, {
