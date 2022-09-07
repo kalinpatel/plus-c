@@ -5,7 +5,7 @@
       "destination": "https://api.plusc.kalinpatel.me/file/:file"
     },
     {
-      "source": "/((?!link/.*).*)",
+      "source": "/((?!api/.*).*)",
       "destination": "/index.html"
     }
   ],

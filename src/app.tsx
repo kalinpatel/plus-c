@@ -154,7 +154,6 @@ export default function App() {
               <Route path="/help" element={<HelpPage />} />
               {/* Share Handler */}
               <Route path="/share/*" element={<ShareHandler />} />
-              <Route path="/link/*" element={<ShareHandler />} />
               {/* 404 page */}
               <Route path="*" element={<NotFound />} />
             </Routes>
