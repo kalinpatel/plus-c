@@ -17,7 +17,7 @@ const q_set = async (url: string) => {
     ).data;
     const root = parse(raw_set);
 
-    const getText = (selector) => {
+    const getText = (selector: any) => {
       return root?.querySelector(selector)?.childNodes[0].rawText;
     };
 
