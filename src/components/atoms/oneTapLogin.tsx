@@ -80,7 +80,9 @@ export default function OneTapLogin({ disabled }: OneTapLoginProps) {
         disabled ||
         loadingSignedIn ||
         !!(!loadingSignedIn && signedIn) ||
-        (location.pathname !== "/" && !location.pathname.startsWith("/study"))
+        (location.pathname !== "/" &&
+          !location.pathname.startsWith("/study") &&
+          location.pathname !== "/study")
       }
       googleAccountConfigs={{
         callback: handleOneTapLogin,

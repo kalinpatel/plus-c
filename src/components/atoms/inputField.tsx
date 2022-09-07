@@ -150,21 +150,23 @@ export default function InputField({
         {...props}
       />
       {label && <StyledLabel htmlFor={id}>{label}</StyledLabel>}
-      <Tooltip
-        show={tooltipShown}
-        static
-        backgroundColor={
-          theme.darkMode
-            ? theme.colors.peripheral.extraDarkGrey
-            : theme.colors.peripheral.extraLightGrey
-        }
-        // @ts-expect-error Border radius is a valid prop, but is not defined in the type
-        borderRadius={theme.borderRadius.default}
-        position="top start"
-        arrowAlign="center"
-      >
-        <StyledTooltip>{tooltip}</StyledTooltip>
-      </Tooltip>
+      {tooltip && (
+        <Tooltip
+          show={tooltipShown}
+          static
+          backgroundColor={
+            theme.darkMode
+              ? theme.colors.peripheral.extraDarkGrey
+              : theme.colors.peripheral.extraLightGrey
+          }
+          // @ts-expect-error Border radius is a valid prop, but is not defined in the type
+          borderRadius={theme.borderRadius.default}
+          position="top start"
+          arrowAlign="center"
+        >
+          <StyledTooltip>{tooltip}</StyledTooltip>
+        </Tooltip>
+      )}
     </Wrapper>
   );
 }

@@ -10,6 +10,7 @@ const Container = styled.div`
   width: 80vw;
   height: fit-content;
   margin: 0 auto;
+  margin-top: 20px;
   padding-bottom: 40px;
   @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     width: calc(100vw - 40px);

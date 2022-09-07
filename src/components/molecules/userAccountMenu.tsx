@@ -67,7 +67,7 @@ const EmptyUserPicture = styled.span`
     color: ${({ theme }) => theme.colors.brand.tertiary};
   }
   animation: fadeIn 0.18s ease-in-out;
-  animation-delay: 0.15s;
+  animation-delay: 0s;
   opacity: 0;
   @keyframes fadeIn {
     from {
@@ -119,11 +119,7 @@ export default function UserAccountMenu({ user }: UserAccountMenuProps) {
   function changeUserIconPicture(userPictureURL: any, userDisplayName: any) {
     if (userPictureURL) {
       setUserIconPicture(
-        <UserPicture
-          src={userPictureURL}
-          referrerPolicy="no-referrer"
-          alt="User Icon Picture"
-        />
+        <UserPicture src={userPictureURL} referrerPolicy="no-referrer" alt="" />
       );
     } else if (userDisplayName) {
       setUserIconPicture(
@@ -140,7 +136,12 @@ export default function UserAccountMenu({ user }: UserAccountMenuProps) {
   return (
     <DropdownMenu
       menuButton={() => (
-        <AuthButton name="User Account Dropdown">{userIconPicture}</AuthButton>
+        <AuthButton
+          name="User Account Dropdown"
+          aria-label="User Account Dropdown"
+        >
+          {userIconPicture}
+        </AuthButton>
       )}
       direction="bottom"
       align="end"

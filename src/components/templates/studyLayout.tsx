@@ -1,5 +1,6 @@
-import Meta from "@/atoms/meta";
 import MustBeAuthed from "@/atoms/mustBeAuthed";
+import OneTapLogin from "@/atoms/oneTapLogin";
+import Meta from "@/atoms/studyMeta";
 import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
 import ErrorBoundaryComponent from "@/molecules/errorBoundary";
 import { AnimationContext } from "app";
@@ -33,6 +34,7 @@ interface LayoutProps {
   title: string;
   restricted?: boolean;
   background?: string;
+  oneTapDisabled?: boolean;
 }
 
 const ImageWrapper = styled.div`
@@ -47,6 +49,7 @@ export default function Layout({
   title,
   restricted,
   background,
+  oneTapDisabled,
 }: LayoutProps) {
   const isMobilePWA = useIsInstalledMobile();
   let bg = "";
@@ -59,6 +62,7 @@ export default function Layout({
       {restricted && <MustBeAuthed />}
       <Meta title={title} />
       <Page className={isMobilePWA ? "mobile " : ""}>
+        <OneTapLogin disabled={oneTapDisabled} />
         <AnimationContext.Consumer>
           {(value) => (
             <Container

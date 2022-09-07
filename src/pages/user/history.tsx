@@ -28,7 +28,7 @@ const Disclaimer = styled.p`
   color: ${({ theme }) => theme.colors.peripheral.minorVariant};
   width: calc(100% - 40px);
   padding: 0 20px;
-  margin-bottom: 40px;
+  padding-bottom: 20px;
   text-align: center;
   text-decoration: underline;
   text-decoration-color: ${({ theme }) => theme.colors.action.warning};
@@ -290,11 +290,13 @@ export default function History() {
                 </>
               ))}
             </ListContainer>
-            <DefaultButton
-              onClick={() => loadMore(list[list.length - 1].timestamp)}
-            >
-              Load more items...
-            </DefaultButton>
+            {list.length >= ItemsToFetch && (
+              <DefaultButton
+                onClick={() => loadMore(list[list.length - 1].timestamp)}
+              >
+                Load more items...
+              </DefaultButton>
+            )}
           </>
         ) : listQueried ? (
           <InfoText>

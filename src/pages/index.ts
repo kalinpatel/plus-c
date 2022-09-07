@@ -133,7 +133,7 @@ const pages: Category[] = [
   //   ],
   // },
   {
-    name: "Approximations",
+    name: "Approximate",
     path: "approximations",
     items: [
       {

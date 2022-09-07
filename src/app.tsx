@@ -2,6 +2,8 @@ import { darkTheme, lightTheme, ThemeOptions } from "@/brand/theme";
 import { firebaseApp } from "@/firebase";
 import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
 import Footer from "@/organisms/footer";
+import Navbar from "@/organisms/navbar";
+import StudyNavbar from "@/organisms/studyNavbar";
 import NotFound from "@/pages/404";
 import EulersMethod from "@/pages/content/approximations/eulersMethod";
 import RiemannSum from "@/pages/content/integrals/riemannSum";
@@ -10,6 +12,7 @@ import Home from "@/pages/home";
 import License from "@/pages/legal/license";
 import TermsOfUse from "@/pages/legal/terms";
 import ShareHandler from "@/pages/shareHandler";
+import Study from "@/pages/study";
 import Auth from "@/pages/user/auth";
 import History from "@/pages/user/history";
 import Settings from "@/pages/user/settings";
@@ -121,6 +124,7 @@ export default function App() {
           setSetting: setTernaryDarkMode,
         }}
       >
+        {location.pathname.startsWith("/study") ? <StudyNavbar /> : <Navbar />}
         <AnimationContext.Provider value={animationValue}>
           <AnimatePresence exitBeforeEnter>
             <Routes location={location} key={location.pathname}>
@@ -142,6 +146,9 @@ export default function App() {
               />
               <Route path="/integrals/riemann-sum" element={<RiemannSum />} />
               {/* ---- CONTENT END ---- */}
+              {/* ---- STUDY START ---- */}
+              <Route path="/study" element={<Study />} />
+              {/* ---- STUDY END ---- */}
 
               {/* Help */}
               <Route path="/help" element={<HelpPage />} />

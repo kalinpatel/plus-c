@@ -6,8 +6,8 @@ import DidYouKnow from "@/molecules/didYouKnow";
 import LoginWithMagicLink from "@/molecules/loginWithMagicLink";
 import LoginWithSocialProvider from "@/molecules/loginWithSocialProvider";
 import Layout from "@/templates/layout";
-import { UserInfo } from "firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -82,15 +82,19 @@ const AsideArea = styled.aside`
   justify-content: center;
   align-items: center;
   height: 100%;
+  min-height: 140px;
   width: calc(100% - 40px);
   margin: 0px auto;
   pointer-events: none;
+
   h5 {
     font-size: 1.7rem;
-    opacity: 0.85;
+    opacity: 1;
     text-align: center;
     color: ${({ theme }) => theme.colors.themed.minor};
     user-select: none;
+    background: ${({ theme }) => theme.colors.themed.major};
+    padding: 4px;
     .math-fact {
       display: block;
       margin-top: 18px;
@@ -122,28 +126,23 @@ const MethodSeparator = styled.div`
 export default function Auth() {
   const navigate = useNavigate();
   const location = useLocation();
-  const referrerState: any = location.state;
+  const [user, loading] = useAuthState(firebaseAuth);
 
-  function handleAuthDestination(user: UserInfo | null) {
-    if (user) {
-      if (referrerState && referrerState !== "signedOut") {
-        navigate(referrerState, { replace: true });
-      } else {
-        navigate("/");
-      }
+  useEffect(() => {
+    if (user && !loading) {
+      const referrer = location.state || "/";
+      navigate(referrer as string, { replace: true });
     }
-  }
-
-  onAuthStateChanged(firebaseAuth, handleAuthDestination);
+  }, [user, loading]);
 
   useEffectOnce(() => {
     // Show sign out success toast
-    if (referrerState === "signedOut") {
+    if (location.state === "signedOut") {
       toast.success("Successfully signed out");
     }
 
     // See if user should be redirected based on auth state
-    handleAuthDestination(firebaseAuth.currentUser);
+    if (user && !loading) navigate("/");
   });
 
   return (
@@ -153,17 +152,17 @@ export default function Auth() {
         <Page>
           <LoginArea>
             <h1>Sign In</h1>
-            <LoginWithMagicLink referrer={referrerState} />
+            <LoginWithMagicLink referrer={(location.state as string) || "/"} />
             <MethodSeparator>
               <div>or</div>
             </MethodSeparator>
             <LoginWithSocialProvider />
             <p>
               <strong>Why sign in?</strong>
-              You&apos;ll get access to a recent history of your calculations.
-              Only your email and calculation history will be stored. <br />
-              See the <Link to="/legal/privacy">privacy statement</Link> for
-              more information.
+              You&apos;ll get access to a recent history of your calculations
+              and study decks. See the{" "}
+              <Link to="/legal/privacy">privacy statement</Link> for more
+              information.
             </p>
           </LoginArea>
           <AsideArea>

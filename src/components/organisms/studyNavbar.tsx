@@ -1,14 +1,14 @@
-import LogoLink from "@/atoms/logoLink";
 import SignInButton from "@/atoms/signInButton";
-import Lightbulb from "@/brand/assets/Lightbulb.svg";
+import StudyLogo from "@/brand/assets/StudyLogo.svg";
+import StudyLogoDark from "@/brand/assets/StudyLogoDark.svg";
 import { firebaseAuth } from "@/firebase";
-import Dropdown, { DropdownButton } from "@/molecules/dropdownMenu";
 import UserAccountMenu from "@/molecules/userAccountMenu";
-import CollapsibleNav from "@/organisms/collapsibleNav";
-import pages from "@/pages/index";
+import CollapsibleNav from "@/organisms/studyCollapsibleNav";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { BiPlus } from "react-icons/bi";
+import { IoArrowBack } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { useMediaQuery } from "usehooks-ts";
 
 const Navigation = styled.div`
@@ -38,40 +38,36 @@ const SignInFiller = styled.div`
   pointer-events: none;
 `;
 
-const StudyButton = styled.button`
+const MenuButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   padding: 8px 12px;
-  margin-right: 12px;
-  height: 35px;
   border-radius: ${({ theme }) => theme.borderRadius.default};
   border: 1px solid transparent;
   cursor: pointer;
   background: none;
   color: ${({ theme }) => theme.colors.themed.minor};
   transition: color 0.18s ease-in-out, border 0.18s ease-in-out;
+  &.last {
+    margin-right: 12px;
+  }
+  & > .icon {
+    margin-right: 6px;
+  }
   &:hover {
     color: ${({ theme }) => theme.colors.brand.accent};
     border: 1px solid ${({ theme }) => theme.colors.brand.accent};
     img {
-      filter: invert(30%) sepia(44%) saturate(3312%) hue-rotate(317deg)
-        brightness(88%) contrast(93%);
+      scale: 1.1;
     }
   }
 `;
 
-const LightbulbIcon = styled.img`
-  transition: scale 0.18s ease-in-out;
-  transform: translateY(-2px);
-  height: 25px;
-  margin-right: 10px;
-  transition: filter 0.18s ease-in-out;
-  ${({ theme }) =>
-    theme.darkMode
-      ? "filter: invert(95%) sepia(10%) saturate(199%) hue-rotate(77deg) brightness(118%) contrast(92%);"
-      : "filter: invert(14%) sepia(0%) saturate(1205%) hue-rotate(181deg) brightness(99%) contrast(81%);"};
+const Logo = styled.img`
+  height: 75px;
+  margin-left: 10px;
 `;
 
 export default function Navbar() {
@@ -79,6 +75,7 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [user, loading] = useAuthState(firebaseAuth);
+  const theme = useTheme();
 
   return (
     <>
@@ -86,31 +83,21 @@ export default function Navbar() {
         <CollapsibleNav user={user} />
       ) : (
         <Navigation>
-          <LogoLink disabled={location.pathname === "/"} />
+          <Logo src={theme.darkMode ? StudyLogoDark : StudyLogo} />
           <NavLinks>
-            {location.pathname !== "/" && (
-              <DropdownButton
-                onClick={() => navigate("/")}
-                style={{
-                  paddingInline: "14px",
-                  marginRight: "8px",
-                }}
-              >
-                Home
-              </DropdownButton>
+            <MenuButton
+              onClick={() => navigate("/")}
+              className={location.pathname !== "/study" ? "" : "last"}
+            >
+              <IoArrowBack className="icon" />
+              Exit to +C
+            </MenuButton>
+            {location.pathname !== "/study" && (
+              <MenuButton onClick={() => navigate("/study")} className="last">
+                <BiPlus className="icon" />
+                Study a new set
+              </MenuButton>
             )}
-            {pages.map((page) => (
-              <Dropdown
-                name={page.name}
-                path={page.path}
-                items={page.items}
-                key={page.name}
-              />
-            ))}
-            <StudyButton onClick={() => navigate("/study")}>
-              <LightbulbIcon src={Lightbulb} alt="Lightbulb icon" />
-              Study
-            </StudyButton>
             {!loading && user ? (
               <UserAccountMenu user={user} />
             ) : loading ? (

@@ -47,7 +47,7 @@ export default function SignInButton() {
       onClick={() => {
         if (location.pathname !== "/user/auth") {
           navigate("/user/auth", {
-            state: window.location.pathname,
+            state: location.pathname,
           });
         }
       }}
