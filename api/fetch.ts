@@ -2,7 +2,9 @@ import http from "axios";
 import { parse } from "node-html-parser";
 
 export default async function handler(request: any, response: any) {
+  console.log(request.body.link);
   const data = await q_set(request.body.link);
+  console.log(data);
   return response.status(200).json({ data });
 }
 
