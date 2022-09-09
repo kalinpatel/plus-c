@@ -18,6 +18,7 @@ import { BiRightArrowAlt } from "react-icons/bi";
 import ReactRotatingText from "react-rotating-text";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useEffectOnce } from "usehooks-ts";
 
 const Container = styled.div`
   display: flex;
@@ -164,6 +165,13 @@ export default function Study() {
   const [inputValue, setInputValue] = useState("");
   const [user, loading] = useAuthState(firebaseAuth);
   const navigate = useNavigate();
+
+  useEffectOnce(() => {
+    // TESTING API
+    fetch(`https://plusc-proxy.tk/${314655274}`).then((res) => {
+      console.log(res);
+    });
+  });
 
   async function retrieveAndSetData(
     uid: string,
