@@ -5,10 +5,6 @@
       "destination": "https://api.plusc.kalinpatel.me/file/:file"
     },
     {
-      "source": "/external/:url",
-      "destination": ":url"
-    },
-    {
       "source": "/((?!api/.*).*)",
       "destination": "/index.html"
     }

@@ -168,9 +168,7 @@ export default function Study() {
 
   useEffectOnce(() => {
     // TESTING API
-    fetch(
-      `/external/${import.meta.env.REACT_CLIENT_PROXY_DOMAIN}/${314655274}`
-    ).then((res) => {
+    fetch(`https://plus-c.kalinpatel.workers.dev/${314655274}`).then((res) => {
       console.log(res);
     });
   });
