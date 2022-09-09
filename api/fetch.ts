@@ -14,6 +14,8 @@ const q_set = async (url: string) => {
       await http.get(url, {
         headers: {
           Accept: "text/html",
+          "User-Agent":
+            "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0",
         },
       })
     ).data;
