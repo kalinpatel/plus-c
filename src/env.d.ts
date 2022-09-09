@@ -14,6 +14,7 @@ interface ImportMetaEnv {
   readonly REACT_CLIENT_FIREBASE_REDIRECT_ORIGIN: string;
   readonly REACT_CLIENT_FIREBASE_API_DOMAIN;
   readonly REACT_CLIENT_FIREBASE_LINK_DOMAIN;
+  readonly REACT_CLIENT_PROXY_DOMAIN;
 }
 
 interface ImportMeta {

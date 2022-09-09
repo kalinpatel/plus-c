@@ -168,7 +168,9 @@ export default function Study() {
 
   useEffectOnce(() => {
     // TESTING API
-    fetch(`https://plusc-proxy.tk/${314655274}`).then((res) => {
+    fetch(
+      `/external/${import.meta.env.REACT_CLIENT_PROXY_DOMAIN}/${314655274}`
+    ).then((res) => {
       console.log(res);
     });
   });
