@@ -1,9 +1,8 @@
-import { BsArrowRightShort } from "react-icons/bs";
-import { TiLightbulb } from "react-icons/ti";
-import { MdClear } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import Button from "@/atoms/defaultButton";
+import { BsArrowRightShort } from "react-icons/bs";
+import { MdClear } from "react-icons/md";
+import { TiLightbulb } from "react-icons/ti";
+import styled from "styled-components";
 
 interface MathSubmitButtonsRowProps {
   onReset: () => void;
@@ -31,7 +30,6 @@ export default function MathSubmitButtonsRow({
   onReset,
   canSubmit,
 }: MathSubmitButtonsRowProps) {
-  const navigate = useNavigate();
   return (
     <StyledColumn>
       <Button
@@ -44,7 +42,10 @@ export default function MathSubmitButtonsRow({
       <StyledRow>
         <Button
           onClick={() => {
-            navigate("/help");
+            window.open(
+              "https://www.khanacademy.org/math/ap-calculus-bc/bc-differential-equations-new/bc-7-5/v/eulers-method",
+              "_blank"
+            );
           }}
           type="button"
           className="icon"

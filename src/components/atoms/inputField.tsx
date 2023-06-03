@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import Tooltip from "react-power-tooltip";
 import styled, { useTheme } from "styled-components";
-import { v4 as uuid } from "uuid";
 
 const Wrapper = styled.div`
   position: relative;
@@ -119,7 +118,7 @@ export default function InputField({
   numericInput,
   ...props
 }: InputFieldProps) {
-  const id = uuid();
+  const id = useId();
   const [tooltipShown, setTooltipShown] = useState(false);
   const theme = useTheme();
 

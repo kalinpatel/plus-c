@@ -1,5 +1,4 @@
 import Logo from "@/brand/logo";
-import { Link } from "react-router-dom";
 import styled, { useTheme } from "styled-components";
 
 const Container = styled.div`
@@ -65,7 +64,7 @@ const CopyrightText = styled.div`
   }
 `;
 
-const LicenseLink = styled(Link)`
+const LicenseLink = styled.a`
   font-size: 12pt;
   color: ${({ theme }) => theme.colors.themed.minor};
   text-align: left;
@@ -92,7 +91,7 @@ const LinksSection = styled.div`
   }
 `;
 
-const FooterLink = styled(Link)`
+const FooterLink = styled.a`
   font-size: 12pt;
   color: ${({ theme }) => theme.colors.peripheral.minorVariant};
   text-align: center;
@@ -113,15 +112,19 @@ export default function Footer() {
           <Logo type={theme.darkMode ? "text-light" : "text-dark"} />
           <CopyrightText>
             <p>Made by Kalin Patel</p>
-            <LicenseLink to="/legal/license">
+            <LicenseLink
+              href="https://github.com/kalinpatel/plus-c/blob/master/LICENSE.md"
+              target="_blank"
+            >
               Open Source under the MPL 2.0 License
             </LicenseLink>
           </CopyrightText>
         </CompanySection>
         <LinksSection>
-          <FooterLink to="/about">About</FooterLink>
-          <FooterLink to="/user/settings">Settings</FooterLink>
-          <FooterLink to="/legal/terms">
+          <FooterLink href="https://kalinpatel.me/plus-c" target="_blank">
+            About
+          </FooterLink>
+          <FooterLink href="/legal/terms">
             Terms of Use & Privacy Statement
           </FooterLink>
         </LinksSection>
