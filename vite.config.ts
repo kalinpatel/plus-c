@@ -1,6 +1,5 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import checker from "vite-plugin-checker";
 import { VitePWA } from "vite-plugin-pwa";
 import { qrcode } from "vite-plugin-qrcode";
 import reactSvgPlugin from "vite-plugin-react-svg";
@@ -16,12 +15,12 @@ export default defineConfig({
     reactSvgPlugin({
       defaultExport: "url",
     }),
-    checker({
-      typescript: true,
-      eslint: {
-        lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
-      },
-    }),
+    // checker({
+    //   typescript: true,
+    //   eslint: {
+    //     lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+    //   },
+    // }),
     VitePWA({
       includeAssets: [
         "favicon.svg",

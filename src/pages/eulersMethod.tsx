@@ -3,8 +3,6 @@ import InputField from "@/atoms/inputField";
 import MathInputSection from "@/atoms/mathInputSection";
 import MathSubmitButtonsRow from "@/atoms/mathSubmitButtonsRow";
 import { InputContainer, InputSection } from "@/atoms/responsiveInputFields";
-import { firebaseAuth } from "@/firebase";
-import saveToFirestore from "@/firebase/saveToFirestore";
 import calculateEulersMethod, {
   EulersMethodAnswer,
   EulersMethodInputs,
@@ -15,13 +13,9 @@ import MathEntry from "@/molecules/mathEntry";
 import EulersOutputTable from "@/organisms/eulersOutputTable";
 import CalculatorLayout from "@/templates/calculatorLayout";
 import { useEffect, useRef, useState } from "react";
-import { isMobile } from "react-device-detect";
 import toast from "react-hot-toast";
-import { ImShare2 } from "react-icons/im";
 import { VscDebugRestart } from "react-icons/vsc";
-import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useEffectOnce } from "usehooks-ts";
 
 interface StepCountInputsInterface {
   numberUsed: boolean;
@@ -50,20 +44,10 @@ const FlexRow = styled.div`
   gap: 20px;
 `;
 
-const ShareText = styled.p`
-  margin-top: 40px;
-  margin-bottom: 20px;
-  color: ${({ theme }) => theme.colors.themed.minor};
-`;
-
 export default function EulersMethod() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("input");
   const [canSubmit, setCanSubmit] = useState(false);
   const [output, setOutput] = useState<EulersMethodAnswer | null>(null);
-  const [shareData, setShareData] = useState<string | null>(null);
-  const [shareMessage, setShareMessage] = useState(
-    "Share functionality is not available."
-  );
   const [stepCountInputs, setStepCountInputs] =
     useState<StepCountInputsInterface>({
       numberUsed: false,
@@ -82,38 +66,6 @@ export default function EulersMethod() {
     },
     diffEq: "",
     reset: false,
-  });
-  const location = useLocation();
-  const state = location.state as any;
-  const isFromDb = state && typeof state == "object" && "dbData" in state;
-  const dbData = isFromDb ? state.dbData : null;
-
-  useEffectOnce(() => {
-    if (isFromDb) {
-      const dataValues = {
-        initialX: dbData.initialX,
-        initialY: dbData.initialY,
-        finalX: dbData.finalX,
-        step: {
-          definedAs: dbData.stepType,
-          value: dbData.stepValue,
-        },
-        diffEq: dbData.diffEq,
-        reset: false,
-      };
-      const result = calculateEulersMethod(dataValues);
-      setOutput(result as EulersMethodAnswer);
-      setCurrentScreen("output");
-      setValues(dataValues);
-      setShareMessage(
-        `This calculation was originally created by ${
-          state.dbInfo.ownerName
-        } on ${new Date(
-          state.dbInfo.timestamp.seconds * 1000
-        ).toLocaleDateString()}.`
-      );
-      setShareData(state.dbInfo.shareUrl);
-    }
   });
 
   useEffect(() => {
@@ -145,36 +97,6 @@ export default function EulersMethod() {
     });
   }
 
-  async function upload() {
-    if (!firebaseAuth.currentUser) {
-      setShareMessage(
-        "Create an account to save your calculations and share them with others."
-      );
-      return;
-    }
-    const docData = await saveToFirestore({
-      user: firebaseAuth.currentUser!,
-      pageName: "Euler's Method",
-      subtext: `Approximate y(${values.finalX}) given (${values.initialX}, ${values.initialY})`,
-      math: values.diffEq,
-      url: location.pathname,
-      data: {
-        initialX: values.initialX,
-        initialY: values.initialY,
-        finalX: values.finalX,
-        stepType: values.step.definedAs,
-        stepValue: values.step.value,
-        diffEq: values.diffEq,
-      },
-    });
-    if (docData === "offline") {
-      setShareMessage("Your calculation is not saved since you are offline.");
-      return;
-    }
-    setShareData(docData.shareLink);
-    setShareMessage("");
-  }
-
   const Input = (
     <MathInputSection>
       <MathEntry
@@ -197,7 +119,6 @@ export default function EulersMethod() {
           if (result.completed) {
             setOutput(result);
             setCurrentScreen("output");
-            upload();
           } else {
             toast.error(
               `Could not calculate the solution. ${
@@ -310,47 +231,17 @@ export default function EulersMethod() {
     <>
       <EulersOutputTable input={values} result={output} />
       <FlexRow>
-        {!isFromDb && (
-          <Button
-            type="button"
-            onClick={() => {
-              clearData();
-              setCurrentScreen("input");
-            }}
-            className="icon"
-          >
-            Restart <VscDebugRestart />
-          </Button>
-        )}
-        {shareData && (
-          <Button
-            type="button"
-            onClick={() => {
-              if (!shareData) return;
-              if (
-                "canShare" in navigator &&
-                navigator.canShare() &&
-                "share" in navigator &&
-                isMobile
-              ) {
-                navigator.share({
-                  title: "Euler's Method Calculation",
-                  text: "Check out this calculation I made using +C.",
-                  url: shareData,
-                });
-              } else {
-                navigator.clipboard.writeText(shareData).then(() => {
-                  toast.success("Share link copied to clipboard");
-                });
-              }
-            }}
-            className="icon"
-          >
-            Share <ImShare2 />
-          </Button>
-        )}
+        <Button
+          type="button"
+          onClick={() => {
+            clearData();
+            setCurrentScreen("input");
+          }}
+          className="icon"
+        >
+          Restart <VscDebugRestart />
+        </Button>
       </FlexRow>
-      <ShareText>{shareMessage}</ShareText>
     </>
   );
 

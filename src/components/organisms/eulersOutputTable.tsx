@@ -3,7 +3,7 @@ import {
   EulersMethodAnswer,
   EulersMethodInputs,
 } from "@/math/calculators/eulersMethod";
-import { Values } from "@/pages/content/approximations/eulersMethod";
+import { Values } from "@/pages/eulersMethod";
 import TeX from "@matejmazur/react-katex";
 import { useState } from "react";
 import Tooltip from "react-power-tooltip";

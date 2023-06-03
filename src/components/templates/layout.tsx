@@ -1,5 +1,4 @@
 import Meta from "@/atoms/meta";
-import MustBeAuthed from "@/atoms/mustBeAuthed";
 import useIsInstalledMobile from "@/hooks/useIsInstalledMobile";
 import ErrorBoundaryComponent from "@/molecules/errorBoundary";
 import { AnimationContext } from "app";
@@ -42,12 +41,7 @@ const ImageWrapper = styled.div`
   background-size: cover;
 `;
 
-export default function Layout({
-  children,
-  title,
-  restricted,
-  background,
-}: LayoutProps) {
+export default function Layout({ children, title, background }: LayoutProps) {
   const isMobilePWA = useIsInstalledMobile();
   let bg = "";
   if (background) {
@@ -56,7 +50,6 @@ export default function Layout({
 
   return (
     <>
-      {restricted && <MustBeAuthed />}
       <Meta title={title} />
       <Page className={isMobilePWA ? "mobile " : ""}>
         <AnimationContext.Consumer>

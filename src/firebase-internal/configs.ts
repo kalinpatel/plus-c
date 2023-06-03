@@ -9,10 +9,6 @@ interface FirebaseConfiguration {
   measurementId: string;
 }
 
-interface GoogleConfiguration {
-  client_id: string;
-}
-
 const firebaseConfig: FirebaseConfiguration = {
   apiKey: import.meta.env.REACT_CLIENT_FIREBASE_API_KEY,
   authDomain: import.meta.env.REACT_CLIENT_FIREBASE_AUTH_DOMAIN,
@@ -24,8 +20,4 @@ const firebaseConfig: FirebaseConfiguration = {
   measurementId: import.meta.env.REACT_CLIENT_FIREBASE_MEASUREMENT_ID,
 };
 
-const googleConfig: GoogleConfiguration = {
-  client_id: import.meta.env.REACT_CLIENT_GOOGLE_CLIENT_ID,
-};
-
-export { firebaseConfig, googleConfig };
+export { firebaseConfig };

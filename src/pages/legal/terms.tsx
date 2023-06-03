@@ -1,6 +1,5 @@
 import Header from "@/atoms/header";
 import Layout from "@/templates/layout";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useEffectOnce } from "usehooks-ts";
 
@@ -104,13 +103,28 @@ export default function TermsOfUse({ privacy }: TermsOfUseProps) {
         <h2>Copyright</h2>
         <p>
           Visual content, such as images, is deemed to be available in
-          accordance with <Link to="/legal/license">the license</Link> unless:
-          (1) the content bears the &quot;+C&quot;, &quot;+Calculus&quot;, or
-          &quot;Plus C&quot; branding; (2) the content is a logo with
-          representation of the Plus C branding; or (3) the content is noted to
-          be from a third-party, and their terms apply. All source code is open
-          source and may be freely used and shared, in accordance with{" "}
-          <Link to="/legal/license">the license</Link>.
+          accordance with{" "}
+          <a
+            href="https://github.com/kalinpatel/plus-c/blob/master/LICENSE.md"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            the license
+          </a>{" "}
+          unless: (1) the content bears the &quot;+C&quot;,
+          &quot;+Calculus&quot;, or &quot;Plus C&quot; branding; (2) the content
+          is a logo with representation of the Plus C branding; or (3) the
+          content is noted to be from a third-party, and their terms apply. All
+          source code is open source and may be freely used and shared, in
+          accordance with{" "}
+          <a
+            href="https://github.com/kalinpatel/plus-c/blob/master/LICENSE.md"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            the license
+          </a>
+          .
         </p>
         <hr />
         <h2>Third-Party Links</h2>
@@ -153,16 +167,13 @@ export default function TermsOfUse({ privacy }: TermsOfUseProps) {
         </p>
         <hr />
         <p>
-          Analytics data is collected on users of the site. For users within
-          District 113, your organizational affiliation, such as role (staff or
-          student), school building, or graduation year may be automatically
-          collected if you login with school email account. For all other users,
-          no identifiable information is associated with your analytics data.
-        </p>
-        <hr />
-        <p>
-          To delete your account and clear all data, go to User Settings &gt;
-          Danger Zone &gt; Delete Account
+          Analytics data is collected on users of the site. All data is handled
+          in accordance with the{" "}
+          <a href="https://policies.google.com/privacy">
+            Google Analytics Privacy Policy
+          </a>
+          . The data is used to improve the website and to provide a better
+          experience for users.
         </p>
         <hr />
       </Page>

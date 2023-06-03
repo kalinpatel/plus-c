@@ -20,8 +20,6 @@ interface NonColorTheme {
   };
 }
 
-export type ThemeOptions = "light" | "dark" | "system";
-
 export interface Theme extends NonColorTheme {
   darkMode: boolean;
   colors: {
@@ -77,7 +75,6 @@ const defaultTheme: NonColorTheme = {
   },
 };
 
-// Gleam
 export const lightTheme: Theme = {
   colors: {
     themed: {
@@ -112,7 +109,6 @@ export const lightTheme: Theme = {
   darkMode: false,
 };
 
-// Shadow
 export const darkTheme: Theme = {
   colors: {
     themed: {
