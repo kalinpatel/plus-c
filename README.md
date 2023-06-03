@@ -8,6 +8,8 @@ Check out the following links for more information:
 
 Plus C is a progressive web application (PWA) that serves as a calculus calculator. Currently, it includes the Euler's Method for solving differential equations.
 
+---
+
 ## Technologies Used
 
 Plus C is built with the following technologies:
@@ -33,6 +35,9 @@ To run Plus C on your local machine, follow these steps:
 
 1. Clone this repository
 2. Install dependencies by running `npm install`
+
+   - Some package versions may throw errors. If you get an error while installing, try `npm install --legacy-peer-deps` or `npm install --force`
+
 3. Start the development server by running `npm run dev`
 
 ## Contributing
