@@ -7,6 +7,7 @@ import EulersMethod from "@/pages/eulersMethod";
 import Home from "@/pages/home";
 import { AnimatePresence } from "framer-motion";
 import { createContext, useEffect, useState } from "react";
+import ReactGA from "react-ga4";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { useMediaQuery } from "usehooks-ts";
@@ -70,6 +71,8 @@ body {
 `;
 
 export const AnimationContext = createContext(DesktopAnimation);
+
+ReactGA.initialize("G-GW4Y469NL6");
 
 export default function App() {
   const location = useLocation();

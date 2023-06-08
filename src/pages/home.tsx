@@ -39,11 +39,6 @@ export default function Home() {
           generate solutions on your device, without needing to reach out to a
           server.
         </p>
-        <p>
-          Data is collected through Google Analytics and Firebase Performance
-          Monitoring when you use this site. See the{" "}
-          <a href="/legal/privacy">privacy policy</a> for more details.
-        </p>
       </SmallText>
       <div
         style={{
