@@ -8,6 +8,7 @@ import styled from "styled-components";
 const SmallText = styled.div`
   width: 50%;
   margin: 0 auto;
+  color: ${({ theme }) => theme.colors.peripheral.minorVariant};
 `;
 
 const DidYouKnowWrapper = styled.div`
